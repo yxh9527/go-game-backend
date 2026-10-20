@@ -1,0 +1,285 @@
+syntax = "proto3";
+
+option go_package = "./services;services";
+
+package lottery;
+
+import "base.proto";
+
+service LotteryService {
+    //获取水池数据
+    rpc PoolAmountResult(PoolAmountResultReq) returns (PoolAmountResultResp);
+
+    // 权威余额查询（供 CommonRpcProd.getBalance）
+    rpc GetBalance(GetBalanceReq) returns (GetBalanceResp);
+
+    // 长期游戏状态存储（供 StorageRpcProd，落库不走注单链路）
+    rpc SaveGameStorage(SaveGameStorageReq) returns (SaveGameStorageResp);
+    rpc LoadGameStorage(LoadGameStorageReq) returns (LoadGameStorageResp);
+    rpc DeleteGameStorage(DeleteGameStorageReq) returns (DeleteGameStorageResp);
+
+    // 新服正式环境门面
+    rpc SlotsDoBet(SlotsDoBetReq) returns (SlotsDoBetResp);
+    rpc SlotsDoBetFree(SlotsDoBetFreeReq) returns (SlotsDoBetResp);
+    // UG5 竞猜：每次增量结算，complete 时才写整链注单
+    rpc Ug5Guess(Ug5GuessReq) returns (Ug5GuessResp);
+    rpc FruitDoBet(FruitDoBetReq) returns (FruitDoBetResp);
+    rpc Luck5Deal(Luck5DealReq) returns (Luck5Resp);
+    rpc Luck5Settle(Luck5SettleReq) returns (Luck5Resp);
+    rpc FruitDoBetMulti(FruitDoBetMultiReq) returns (FruitDoBetMultiResp);
+    rpc FruitRefundMulti(FruitRefundMultiReq) returns (FruitRefundMultiResp);
+    rpc FruitSettleRound(FruitSettleRoundReq) returns (FruitSettleRoundResp);
+    rpc SetUserIcon(SetUserIconReq) returns (SetUserIconResp);
+}
+
+message SetUserIconReq {
+    uint32 userId = 1;
+    uint32 Icon = 2;
+    uint32 game_id = 3;
+}
+
+message SetUserIconResp {
+    base.error_code code = 1;
+}
+
+message PoolAmountResultReq {
+    uint32 agentId = 1;
+    uint32 gameId = 2;
+    string currencyType = 4;
+}
+
+message PoolAmountResultResp {
+    base.error_code code = 1;
+    string currency = 2;
+}
+
+message GetBalanceReq {
+    uint32 userId = 1;
+}
+
+message GetBalanceResp {
+    base.error_code code = 1;
+    string currency = 2;     // 元，两位小数
+    int64 currencyCent = 3;  // 分，权威整数值
+}
+
+message SaveGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+    string payload = 5;
+    int64 expireSeconds = 6; // <=0 表示不过期
+}
+
+message SaveGameStorageResp {
+    base.error_code code = 1;
+}
+
+message LoadGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+}
+
+message LoadGameStorageResp {
+    base.error_code code = 1;
+    bool found = 2;
+    string payload = 3;
+}
+
+message DeleteGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+}
+
+message DeleteGameStorageResp {
+    base.error_code code = 1;
+}
+
+message GameStorageItem {
+    string storageKey = 1;
+    string payload = 2;
+    int64 expireSeconds = 3;
+}
+
+message SlotDoBetFlowControl {
+    string refundPoolAmount = 1;           // 未使用预占退回水池金额（元）
+    repeated string deleteGameStorageKeys = 2;
+}
+
+message SlotsDoBetReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string winAmount = 7;
+    string preWinAmount = 8; // 预占最大赔付，对应 MaxProfitLoss
+    string account = 9;
+    string recordJson = 10;  // UserRecordInfo JSON；同时作为注单 log
+    repeated GameStorageItem gameStorage = 11;
+    SlotDoBetFlowControl flowControl = 12;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message SlotsDoBetFreeReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string winAmount = 6;
+    string account = 7;
+    string recordJson = 8; // 可空；纯状态 action 可不传注单
+    string totalBetAmount = 9; // 原普通局下注，用于 Complete 统计
+    bool complete = 10;
+    repeated GameStorageItem gameStorage = 11;
+    SlotDoBetFlowControl flowControl = 12;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message SlotsDoBetResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+    string error = 5;
+}
+
+message Ug5GuessReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5; // 整条竞猜链标识，不依赖中途记录
+    string betAmount = 6; // 本次扣款，元；按毛金额传输，不在 game server 扣税
+    string winAmount = 7; // 本次派奖，元；按毛金额传输，不在 game server 扣税
+    bool complete = 8;
+    string recordJson = 9; // 中途必须为空；结束必须是整链记录，统计取记录而非增量金额
+    repeated GameStorageItem gameStorage = 10;
+    repeated string deleteGameStorageKeys = 11;
+}
+
+message Ug5GuessResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+    string error = 5;
+}
+
+message FruitDoBetReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string winAmount = 7;
+    string recordJson = 8;
+    bool complete = 9;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message FruitDoBetResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message Luck5DealReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string reserveAmount = 7;
+}
+
+message Luck5SettleReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string winAmount = 6;
+    string recordJson = 7;
+}
+
+message Luck5Resp {
+    base.error_code code = 1;
+    bool ret = 2;
+    int64 currencyCent = 3;
+    string error = 4;
+}
+
+message FruitDoBetMultiReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    uint32 areaId = 7;
+}
+
+message FruitDoBetMultiResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message FruitRefundMultiReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+}
+
+message FruitRefundMultiResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message FruitSettlePlayer {
+    uint32 userId = 1;
+    string userName = 2;
+    int32 userIcon = 3;
+    string totalBet = 4;
+    string winAmount = 5;
+    string recordJson = 6;
+    string account = 7;
+}
+
+message FruitSettleRoundReq {
+    uint32 gameId = 1;
+    uint32 agentId = 2;
+    string currencyType = 3;
+    int64 period = 4;
+    string roundId = 5;
+    repeated FruitSettlePlayer players = 6;
+}
+
+message FruitSettlePlayerResult {
+    uint32 userId = 1;
+    string currency = 2;
+    int64 currencyCent = 3;
+}
+
+message FruitSettleRoundResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    repeated FruitSettlePlayerResult players = 3;
+}

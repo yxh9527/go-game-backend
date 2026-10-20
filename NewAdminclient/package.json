@@ -1,0 +1,31 @@
+{
+  "name": "new-adminclient",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
+    "element-ui": "^2.15.14",
+    "file-saver": "^2.0.5",
+    "js-cookie": "^3.0.5",
+    "jszip": "^3.10.1",
+    "qs": "^6.13.1",
+    "sharp": "^0.34.5",
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5",
+    "vuex": "^3.6.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "less": "^4.2.1",
+    "less-loader": "^8.1.1",
+    "vue-template-compiler": "^2.7.16"
+  }
+}

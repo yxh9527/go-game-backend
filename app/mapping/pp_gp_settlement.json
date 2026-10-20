@@ -1,0 +1,99 @@
+{
+  "mappings": {
+    "properties": {
+      "webId": {
+        "type": "integer"
+      },
+      "userId": {
+        "type": "integer"
+      },
+      "agentId": {
+        "type": "integer"
+      },
+      "gameId": {
+        "type": "integer"
+      },
+      "account": {
+        "type": "text"
+      },
+      "nickName": {
+        "type": "text"
+      },
+      "bet": {
+        "type": "double"
+      },
+      "exBet": {
+        "type": "double"
+      },
+      "currency": {
+        "type": "text"
+      },
+      "currencySymbol": {
+        "type": "text"
+      },
+      "base_bet": {
+        "type": "integer"
+      },
+      "win": {
+        "type": "double"
+      },
+      "exWin": {
+        "type": "double"
+      },
+      "rtp": {
+        "type": "integer"
+      },
+      "playedDate": {
+        "type": "long"
+      },
+      "roundID": {
+        "type": "text"
+      },
+      "init": {
+        "type": "text"
+      },
+      "log": {
+        "type": "text"
+      },
+      "symbol": {
+        "type": "text"
+      },
+      "hash": {
+        "type": "text"
+      },
+      "balance": {
+        "type": "double"
+      },
+      "balance_cash": {
+        "type": "double"
+      },
+      "balance_bonus": {
+        "type": "double"
+      },
+      "rowVersion": {
+        "type": "long"
+      },
+      "revenue": {
+        "type": "double"
+      },
+      "exRevenue": {
+        "type": "double"
+      },
+      "pmup": {
+        "type": "double"
+      },
+      "gameName": {
+        "type": "text"
+      },
+      "chips": {
+        "type": "double"
+      },
+      "complete": {
+        "type": "boolean"
+      },
+      "isTourist": {
+        "type": "integer"
+      }
+    }
+  }
+}

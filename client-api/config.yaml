@@ -1,0 +1,33 @@
+redis:
+  host:
+    - "172.21.211.214:6379"
+  user: ""
+  pwd: ""
+mysql:
+  player:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_player"
+  manager:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_web_manager"
+elastic:
+  hosts:
+    - "http://172.21.211.214:9200"
+  username: "elastic"
+  password: "000000"
+server_ip: "172.21.211.214"
+server_port: 11037
+cache:
+  memory_ttl_seconds: 5
+rate_limit:
+  qps: 20
+  burst: 40
+games: {}
+internal_api_key: "7svPaTAeMso4sokNwJf1zoQb32TD1x99"
+log: ""

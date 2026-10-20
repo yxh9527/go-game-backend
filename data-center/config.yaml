@@ -1,0 +1,29 @@
+﻿redis:
+  host:
+    - "172.21.211.214:6379"
+  user: ""
+  pwd: ""
+mysql:
+  player:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_player"
+  manager:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_web_manager"
+elastic:
+  hosts:
+    - "http://172.21.211.214:9200"
+  username: "elastic"
+  password: "000000"
+#瀵瑰鎻愪緵鏈嶅姟鐨勫綋鍓嶆湇鍔″櫒澶栫綉鎴栧唴缃慽p
+server_ip: "172.21.211.214"
+#瀵瑰鎻愪緵鏈嶅姟鐨勫綋鍓嶆湇鍔″櫒绔彛
+server_port: 11036
+#鏃ュ織淇濆瓨璺緞
+log: ""

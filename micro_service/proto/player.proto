@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "./services;services";
+
+package player;
+
+message HumanPlayer {
+	uint32 Id = 1; // 玩家id
+	string Nickname = 2; // 玩家昵称
+	string GameCurrency = 3; // 玩家游戏币数量
+	string Avatar = 4; // 玩家头像
+	uint32 Gender = 5; // 性别
+	uint32 Exp = 6; // 经验值
+	uint32 AgentId = 7; // 代理商id
+	string LoginIP = 8; // 登录ip
+	int64  LoginTimeStamp = 9; // 登录时间戳
+	string CurrencyLimit = 10; // 部分游戏进入游戏前设置的带入限制
+	uint32 WebSiteId = 11; // 平台id
+	uint32 Factory = 12;//登录厂商
+	string head_frame=13;//头像框
+	string Account=14;//
+	string currency_type=15;
+	string points = 16;//积分牌
+	string value = 17;//身价
+	string reward = 18;//赏金
+	int32  all_times = 19;//总手数
+	int32  isTourist = 20;//是否是游客账户
+	string ex_data = 21;//扩展数据
+}
+
+message PlayerStatistics {
+	uint32 times = 2;
+	uint32 bet=3;
+	uint32 incr=4;
+}

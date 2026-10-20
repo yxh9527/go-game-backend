@@ -1,0 +1,92 @@
+@import '~iview/src/styles/index.less';
+
+@menu-dark-title: #001529;
+@menu-dark-active-bg: #419ef5;
+@layout-sider-background: #001529;
+
+
+
+// 自定义组件样式
+.radio-style {
+  margin-right: 10px !important;
+  border-radius: 5px !important;
+}
+
+.select-style {
+  margin-top: 10px;
+  margin-right: 20px;
+  display: inline-block;
+
+  >label {
+    margin-right: 5px;
+  }
+
+  >button {
+    padding: 0 25px;
+  }
+}
+
+.label-style {
+  display: inline-block;
+  min-width: 180px;
+  line-height: 40px;
+  margin-right: 30px;
+  list-style: none;
+
+  >label {
+    margin-right: 5px;
+  }
+
+}
+
+.search {
+  display: inline;
+
+  >button {
+    margin-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.ivu-layout-sider,
+.ivu-menu-dark,
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title {
+  background: #1c5a94 !important;
+}
+
+
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu) {
+  background: #1890ff !important;
+  color: white !important;
+}
+
+
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+
+.ivu-spin {
+  color: #8cbff1 !important
+}
+
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.demo-spin-col {
+  height: 100px;
+  position: relative;
+  border: 1px solid #eee;
+}

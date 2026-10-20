@@ -1,0 +1,7 @@
+.idea
+.vscode
+test
+logs
+*.exe
+
+open-api-access-v2.doc

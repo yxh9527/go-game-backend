@@ -1,0 +1,57 @@
+{
+  "mappings": {
+    "properties": {
+      "webId": {
+        "type": "integer"
+      },
+      "agentId": {
+        "type": "integer"
+      },
+      "gameId": {
+        "type": "integer"
+      },
+      "symbol": {
+        "type": "text"
+      },
+      "doc_count": {
+        "type": "integer"
+      },
+      "profitLossTotal": {
+        "type": "double"
+      },
+      "userTotal": {
+        "type": "integer"
+      },
+      "effectiveBetsTotal": {
+        "type": "double"
+      },
+      "chipsTotal": {
+        "type": "double"
+      },
+      "revenueTotal": {
+        "type": "double"
+      },
+      "pumpTotal": {
+        "type": "double"
+      },
+      "userBetsTotal": {
+        "type": "double"
+      },
+      "date": {
+        "type": "text"
+      },
+      "startTime": {
+        "type": "long"
+      },
+      "endTime": {
+        "type": "long"
+      },
+      "createAt": {
+        "type": "long"
+      },
+      "gameName": {
+        "type": "text"
+      }
+    }
+  }
+}

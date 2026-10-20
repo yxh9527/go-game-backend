@@ -1,0 +1,19 @@
+node {
+   stage('拉取代码') { // for display purposes
+      // Get some code from a repository
+      git credentialsId: '70c48444-b452-43ff-9c5d-cc2443c4fc05', url: 'git@gitlab.private.com:zcx/datacenter'
+   }
+   stage('编译') {
+        def root = tool name: 'Go 1.13.4', type: 'go'
+
+        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin", "GO111MODULE=on", "GOOS=linux", "CGO_ENABLED=0", "GOPROXY=https://goproxy.cn,direct", "GOPRIVATE=gitlab.private.com"]){
+            sh 'go env'
+            sh 'go mod download'
+            sh 'go build -o "datacenter_server" -ldflags "-w -s -extldflags \'-static\'" main.go'
+        }
+   }
+   stage('部署') {
+    //   sh 'mkdir -p /usr/local/jenkins_deploy/gateway'
+    //   sh 'cp gateway_server /usr/local/jenkins_deploy/gateway/gateway_server'
+   }
+}

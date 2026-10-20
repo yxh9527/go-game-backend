@@ -1,0 +1,240 @@
+syntax = "proto3";
+
+option go_package = "./services;services";
+
+package datacenter;
+
+import "player.proto";
+import "base.proto";
+
+service DataCenterService {
+    //获取玩家信息
+    rpc GetPlayer (GetPlayerReq) returns (GetPlayerResp);
+    //获取指定键值
+    rpc GetValue (GetValueReq) returns (GetValueResp);
+    //缓存
+    rpc SetValue (SetValueReq) returns (SetValueResp);
+    //修改玩家信息
+    rpc UpdatePlayerAvatarAndGender (UpdatePlayerAvatarAndGenderReq) returns (UpdatePlayerAvatarAndGenderResp);
+    //获取注单信息（列表，读 ES 旧注单）
+    rpc GetRecords(GetRecordsReq) returns (GetRecordsResp);
+    //注单详情：必须匹配 recordId + userId + gameId
+    rpc GetRecordDetail(GetRecordDetailReq) returns (GetRecordDetailResp);
+    //获取游戏列表
+    rpc GetGameList(GetGameListReq) returns (GetGameListResp);
+    //加锁
+	rpc UserLock(UserLockReq) returns (UserLockResp);
+    //解锁
+	rpc UserUnLock(UserUnLockReq) returns (UserUnLockResp);
+    //获取session
+    rpc GetSesson(GetSessionReq) returns (GetSessionResp);
+
+    // Gateway 鉴权：校验 token / 游戏权限 / 重入
+    rpc Authenticate(AuthenticateReq) returns (AuthenticateResp);
+    // Gateway 登录资料
+    rpc GetLoginData(GetLoginDataReq) returns (GetLoginDataResp);
+    // Gateway token 校验
+    rpc ValidateToken(ValidateTokenReq) returns (ValidateTokenResp);
+}
+
+message GetSessionReq {
+    string key = 1;
+    int64 timeOut = 2;
+}
+
+message GetSessionResp {
+    base.error_code code = 1;
+    string value = 2;
+}
+
+message GetGameListReq {
+
+}
+
+message GetGameListResp {
+    base.error_code   code = 1;
+    //热门游戏的symbol
+    repeated string hot  = 2;
+    //新游戏
+    repeated string new  = 3;
+    //推荐游戏
+    repeated string recommend = 4;
+    //所有游戏及状态
+    repeated  GameInfoItem all = 5;
+
+    message GameInfoItem {
+        //游戏标志
+        string symbol = 1;
+        //游戏状态 1 正常 2 维护
+        int32   state = 2; 
+    }
+}
+
+message UserLockReq {
+	uint32 userId = 1;
+}
+
+message UserLockResp{
+	string result = 1;
+}
+
+message UserUnLockReq{
+	uint32 userId = 1;
+	string token = 2;
+}
+
+message UserUnLockResp{
+	bool result = 1;
+}
+
+message GetRecordsReq {
+    int64  UserId = 1;
+    string Symbol = 2;
+    string Hash = 3; //hash不为空，则以hash为准忽略其他参数（兼容旧调用）
+    string Currency = 4;
+    uint32 GameId = 5; // 可转 symbol；与 Symbol 二选一
+    int64  StartTime = 6; // playedDate 起始（毫秒），0 表示不限
+    int64  EndTime = 7;   // playedDate 结束（毫秒），0 表示不限
+    int32  Page = 8;      // 从 1 开始，默认 1
+    int32  Size = 9;      // 默认 20，最大 100
+}
+
+message RecordItem {
+    uint32 agentId = 1; //代理id
+    uint32 userId = 2; //玩家id
+    double bet = 3; //有效下注
+    string currency = 4;
+    string currencySymbol = 5;
+    double base_bet = 6;
+    double win = 7;
+    double rtp = 8;
+    int64  playedDate = 9;
+    string roundID =10;
+    string init = 11;
+    repeated RecordLog log = 12; //详细
+    string symbol = 13; //游戏id
+    double balance = 14;
+    double balance_cash = 15 ;
+    double balance_bonus = 16;
+    string hash = 17;
+    uint32 gameId = 18;
+    string gameName = 19;
+}
+
+message GetRecordsResp{
+    base.error_code code = 1;
+    repeated RecordItem data = 2;
+    int64 total = 3;
+}
+
+message GetRecordDetailReq {
+    string recordId = 1; // hash 或 roundID
+    uint32 userId = 2;
+    uint32 gameId = 3;
+}
+
+message GetRecordDetailResp {
+    base.error_code code = 1;
+    bool found = 2;
+    RecordItem data = 3;
+}
+
+message RecordLog {
+    string cr = 1;
+    string sr = 2;
+    string roundId = 3;
+}
+
+message GetPlayerReq {
+    uint32 PlayerId = 1;
+	uint32 Factory =  2;
+}
+
+message GetPlayerResp {
+    player.HumanPlayer HumanPlayer = 1;
+}
+
+
+message GetValueReq {
+    string key = 1;
+    int64 timeOut = 2;
+}
+message GetValueResp {
+    base.error_code code = 1;
+    string value = 2;
+}
+
+message SetValueReq {
+    string key = 1;
+    string value = 2;
+    int32 time_out = 3;
+}
+message SetValueResp {
+    base.error_code code = 1;
+}
+
+
+message UpdatePlayerAvatarAndGenderReq {
+    uint32 PlayerId = 1;
+    string Avatar = 2;
+    uint32 Gender = 3;
+	uint32 Factory = 4;
+	string head_frame = 5;
+    string name = 6;//昵称
+}
+
+message UpdatePlayerAvatarAndGenderResp {
+
+}
+
+message AuthenticateReq {
+    string token = 1;
+    uint32 gameId = 2;
+    uint32 entryUserId = 3; // 可选，>0 时必须与 session 用户一致
+}
+
+message AuthenticateResp {
+    base.error_code code = 1;
+    bool success = 2;
+    bool isReEnter = 3;
+    int64 attemptCount = 4;
+    uint32 userId = 5;
+    string message = 6;
+}
+
+message GetLoginDataReq {
+    uint32 userId = 1;
+}
+
+message LoginCurrency {
+    uint32 currencyId = 1;
+    string symbol = 2;
+    double currencyRate = 3;
+}
+
+message LoginProfile {
+    uint32 userId = 1;
+    string userName = 2;
+    uint32 agentId = 3;
+    uint32 topAgentId = 4;
+    int32 userIcon = 5;
+    int32 loginType = 6;
+    int32 gm = 7;
+    double rate = 8;
+    LoginCurrency currency = 9;
+}
+
+message GetLoginDataResp {
+    base.error_code code = 1;
+    LoginProfile profile = 2;
+}
+
+message ValidateTokenReq {
+    string token = 1;
+    uint32 userId = 2;
+}
+
+message ValidateTokenResp {
+    base.error_code code = 1;
+    bool valid = 2;
+}
