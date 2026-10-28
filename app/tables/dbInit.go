@@ -2,6 +2,7 @@ package tables
 
 import (
 	"app/esindex"
+	"app/tables/gogame"
 	"app/tables/manager"
 	"app/tables/player"
 	"encoding/json"
@@ -193,4 +194,8 @@ func InitMysqlDb(m, p *gorm.DB) {
 	p.AutoMigrate(
 		&player.Player{},
 	)
+
+	m.AutoMigrate(gogame.ManagerModels()...)
+	p.AutoMigrate(gogame.PlayerModels()...)
+	gogame.SeedIfEmpty(m, p)
 }
