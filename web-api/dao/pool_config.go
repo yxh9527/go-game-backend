@@ -1,13 +1,45 @@
 package dao
 
 import (
+	"app/entity/view"
 	"app/tables/manager"
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"time"
 
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
+
+const resetPoolConfigKey = "reset_pool_config"
+
+func InitPoolResetConfig() error {
+	ctx := context.Background()
+	_, err := RedisIns().Client.Get(ctx, resetPoolConfigKey).Result()
+	if err == nil {
+		return nil
+	}
+	if err != redis.Nil {
+		return fmt.Errorf("read %s: %w", resetPoolConfigKey, err)
+	}
+
+	config := view.ResetPoolConfig{
+		Interval:  7,
+		ResetTime: time.Now().Unix() + 7*24*60*60,
+	}
+	value, err := json.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("encode %s: %w", resetPoolConfigKey, err)
+	}
+	if err := RedisIns().Client.SetNX(ctx, resetPoolConfigKey, value, 0).Err(); err != nil {
+		return fmt.Errorf("initialize %s: %w", resetPoolConfigKey, err)
+	}
+	zap.L().Info("initialized pool reset config", zap.Int("interval_days", config.Interval))
+	return nil
+}
 
 func SyncPoolConfigsToRedis() error {
 	var poolConfigs []manager.PoolConfig

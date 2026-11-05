@@ -16,6 +16,9 @@ func ManagerModels() []any {
 		&Ticket{},
 		&TicketCurrencyRate{},
 		&Match{},
+		&MatchSchedule{},
+		&MatchOccurrence{},
+		&MatchRuntime{},
 		&RoomConfig{},
 	}
 }

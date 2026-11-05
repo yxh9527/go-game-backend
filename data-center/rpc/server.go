@@ -48,6 +48,7 @@ func (s *Server) Serve(rds *dao.RedisDao, db *dao.DBDao) {
 		grpc.WriteBufferSize(1024*1024))
 	// 注册服务
 	services.RegisterDataCenterServiceServer(ss, s.handler)
+	services.RegisterGogameStorageServiceServer(ss, newGogameStorageService(s.handler.db))
 	// 注册ETCD
 	service, err := NewDefNamingService(rds, esindex.ServiceName("datacenter"), s.address, int32(s.port))
 	if err != nil {

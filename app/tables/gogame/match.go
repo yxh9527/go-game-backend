@@ -12,6 +12,7 @@ type Match struct {
 	RegisterType       int32  `gorm:"column:register_type;default:4;" json:"register_type"`
 	RegisterGold       int64  `gorm:"column:register_gold;default:0;" json:"register_gold"`
 	ServiceGold        int64  `gorm:"column:service_gold;default:0;" json:"service_gold"`
+	RefundServiceFee   int32  `gorm:"column:refund_service_fee;default:0;" json:"refund_service_fee"`
 	Currency           string `gorm:"column:currency;size:16;default:CNY;" json:"currency"`
 	RegisterTicket     int32  `gorm:"column:register_ticket;default:0;" json:"register_ticket"`
 	TicketId           int64  `gorm:"column:ticket_id;default:0;" json:"ticket_id"`

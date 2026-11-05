@@ -64,6 +64,9 @@ func run(cmd *cobra.Command, args []string) {
 	if err := dao.SyncPoolConfigsToRedis(); err != nil {
 		panic(err)
 	}
+	if err := dao.InitPoolResetConfig(); err != nil {
+		panic(err)
+	}
 
 	// Init in-memory configs from Redis.
 	dao.ConfigsInit()

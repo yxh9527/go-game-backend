@@ -1,4 +1,4 @@
-﻿package crontab
+package crontab
 
 import (
 	"app/entity/view"
@@ -25,12 +25,17 @@ var c *cron.Cron = nil
 // 清空水池
 func clearPool() {
 	rpc := &view.ResetPoolConfig{}
-	str := dao.RedisIns().Client.Get(context.Background(), "reset_pool_config").Val()
-	if str != "" {
-		jsoniter.UnmarshalFromString(str, rpc)
+	str, err := dao.RedisIns().Client.Get(context.Background(), "reset_pool_config").Result()
+	if err != nil {
+		zap.L().Error("reset_pool_config read failed", zap.Error(err))
+		return
+	}
+	if err := jsoniter.UnmarshalFromString(str, rpc); err != nil {
+		zap.L().Error("reset_pool_config decode failed", zap.Error(err), zap.String("data", str))
+		return
 	}
 	if rpc.ResetTime == 0 || rpc.Interval == 0 {
-		zap.L().Error("重置水池异常配置异常", zap.Any("data", rpc), zap.Any("str", str))
+		zap.L().Error("reset_pool_config invalid", zap.Any("data", rpc))
 		return
 	}
 	if !rpc.Now && rpc.ResetTime > time.Now().Unix() {
@@ -40,11 +45,16 @@ func clearPool() {
 		"event": "resetPool",
 		"data":  "{}",
 	})
-	dao.RedisIns().Publish("message", msg)
+	if err := dao.RedisIns().Publish("message", msg); err != nil {
+		zap.L().Error("reset_dispatch_failed", zap.Error(err))
+		return
+	}
 	rpc.Now = false
 	rpc.ResetTime = time.Now().Unix() + int64(rpc.Interval)*24*60*60
 	s, _ := jsoniter.MarshalToString(rpc)
-	dao.RedisIns().Client.Set(context.Background(), "reset_pool_config", s, -1)
+	if err := dao.RedisIns().Client.Set(context.Background(), "reset_pool_config", s, -1).Err(); err != nil {
+		zap.L().Error("reset_pool_config update failed", zap.Error(err))
+	}
 }
 
 // 清理数据

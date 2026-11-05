@@ -1,0 +1,19 @@
+syntax = "proto3";
+package datacenter;
+option go_package = "./services;services";
+
+// Internal business operations only. SQL/table names are never accepted.
+service GogameStorageService {
+  rpc Call(GogameStorageRequest) returns (GogameStorageResponse);
+  // One stream owns one MySQL transaction: begin -> snapshot -> commit -> committed.
+  // Cancellation, disconnect and callback errors roll back the transaction.
+  rpc MatchTransaction(stream GogameStorageRequest) returns (stream GogameStorageResponse);
+}
+message GogameStorageRequest {
+  string operation = 1;
+  string payload = 2;
+}
+message GogameStorageResponse {
+  string phase = 1;
+  string payload = 2;
+}
