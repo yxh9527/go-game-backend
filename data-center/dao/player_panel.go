@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"math"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -35,6 +36,8 @@ type playerPanelRecord struct {
 	CountersKnown bool            `json:"countersKnown"`
 }
 type playerPanelInput struct {
+	Page     int    `json:"page"`
+	Size     int    `json:"size"`
 	AgentID  uint32 `json:"agentId"`
 	UserID   uint32 `json:"userId"`
 	TargetID uint32 `json:"targetId"`
@@ -62,7 +65,7 @@ func panelRatio(n, total int64) float64 {
 	if total == 0 {
 		return 0
 	}
-	return float64(n) * 100 / float64(total)
+	return math.Round(float64(n)*10000/float64(total)) / 100
 }
 func (dd *DBDao) gogamePlayerPanel(ctx context.Context, operation, payload string) (any, error) {
 	if dd.db == nil {
@@ -159,6 +162,27 @@ func (dd *DBDao) gogamePlayerPanel(ctx context.Context, operation, payload strin
 			return nil, err
 		}
 		return panelNote(row), nil
+	case "playerPanelRecords":
+		if in.TargetID == 0 || in.TargetID >= 90000000 || in.RoomID <= 0 || in.Page < 1 || in.Size < 1 || in.Size > 100 || (in.Page-1)*in.Size >= 10000 {
+			return nil, status.Error(codes.InvalidArgument, "invalid player records query")
+		}
+		if err := dd.centerIdentity(ctx, in.TargetID, in.AgentID, in.Currency); err != nil {
+			return nil, err
+		}
+		var totals struct{ Total, Score int64 }
+		where := "agent_id=? AND player_id=? AND currency=? AND ended_at>=? AND ended_at<=?"
+		if err := dd.db.WithContext(ctx).Raw("SELECT COUNT(*) AS total,COALESCE(SUM(net),0) AS score FROM gg_player_panel_hand WHERE "+where, in.AgentID, in.TargetID, in.Currency, seven.UnixMilli(), now.UnixMilli()).Scan(&totals).Error; err != nil {
+			return nil, err
+		}
+		var rows []gogame.PlayerPanelHand
+		if err := dd.db.WithContext(ctx).Where(where, in.AgentID, in.TargetID, in.Currency, seven.UnixMilli(), now.UnixMilli()).Order("ended_at DESC,record_key DESC").Limit(in.Size).Offset((in.Page - 1) * in.Size).Find(&rows).Error; err != nil {
+			return nil, err
+		}
+		records := make([]json.RawMessage, 0, len(rows))
+		for _, r := range rows {
+			records = append(records, json.RawMessage(r.Payload))
+		}
+		return map[string]any{"records": records, "total": totals.Total, "score": totals.Score, "paged": true}, nil
 	case "playerPanelRead":
 		if in.TargetID == 0 || in.TargetID >= 90000000 || in.RoomID <= 0 {
 			return nil, status.Error(codes.InvalidArgument, "invalid player statistics target")

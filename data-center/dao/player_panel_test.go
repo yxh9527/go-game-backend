@@ -108,3 +108,39 @@ func TestPlayerPanelDTORejectsUnknownFields(t *testing.T) {
 		t.Fatal(input, err)
 	}
 }
+func TestPlayerPanelReadsLifetimeTotalsWithoutReturningWallets(t *testing.T) {
+	panelFixtureIdentity(t)
+	db, script := gogameTestDB(t,
+		gogameSQLStep{contains: "COUNT(*) AS total_hands", columns: []string{"total_hands", "known", "raised", "voluntary", "table_hands", "table_voluntary", "today_score", "week_score", "seven_hands"}, values: [][]driver.Value{{int64(5), int64(5), int64(2), int64(3), int64(3), int64(2), int64(100), int64(150), int64(0)}}},
+		gogameSQLStep{contains: "gg_player_panel_hand", columns: []string{"payload"}},
+	)
+	value, err := (&DBDao{db: db}).GogameCall(context.Background(), "playerPanelRead", `{"agentId":7,"userId":42,"targetId":42,"currency":"CNY","roomId":700000}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	summary := value.(map[string]any)["statistics"].(map[string]any)
+	if summary["totalHands"] != int64(5) || summary["todayScore"] != int64(100) || summary["flipManualBetPercent"] != float64(40) || summary["tableJoinPercent"] != float64(66.67) {
+		t.Fatal(summary)
+	}
+	if len(script.steps) != 0 {
+		t.Fatal(script.steps)
+	}
+}
+func TestPlayerPanelRecordsKeepTotalAndScoreWhenOnlyOnePageIsReturned(t *testing.T) {
+	panelFixtureIdentity(t)
+	db, script := gogameTestDB(t,
+		gogameSQLStep{contains: "COUNT(*) AS total", columns: []string{"total", "score"}, values: [][]driver.Value{{int64(1234), int64(5678)}}},
+		gogameSQLStep{contains: "OFFSET", columns: []string{"payload"}, values: [][]driver.Value{{`{"userId":42,"roomId":700000,"inning":3,"net":100,"endedAt":1800000000000,"players":[{"uid":42}]}`}}},
+	)
+	value, err := (&DBDao{db: db}).GogameCall(context.Background(), "playerPanelRecords", `{"agentId":7,"userId":42,"targetId":42,"currency":"CNY","roomId":700000,"page":2,"size":1}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	out := value.(map[string]any)
+	if out["total"] != int64(1234) || out["score"] != int64(5678) || len(out["records"].([]json.RawMessage)) != 1 || out["paged"] != true {
+		t.Fatal(out)
+	}
+	if len(script.steps) != 0 {
+		t.Fatal(script.steps)
+	}
+}
