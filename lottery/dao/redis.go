@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"app/cashwallet"
 	. "app/config"
 	"app/entity"
 	"app/esindex"
@@ -194,11 +195,14 @@ func (rd *RedisDao) GetPlayer(playerId, factory uint32) (*services.HumanPlayer, 
 
 func (rd *RedisDao) SetPlayer(p *services.HumanPlayer) error {
 	pID := "player_" + strconv.FormatUint(uint64(p.Id), 10)
+	if err := rd.cli.HSetNX(context.Background(), pID, "currency", decimal.RequireFromString(p.GameCurrency).Mul(decimal.New(1, 2)).IntPart()).Err(); err != nil {
+		return err
+	}
+
 	pipe := rd.cli.Pipeline()
 	pipe.HSet(context.Background(), pID, map[string]interface{}{
 		"id":             p.Id,
 		"nickname":       p.Nickname,
-		"currency":       decimal.RequireFromString(p.GameCurrency).Mul(decimal.New(1, 2)).IntPart(), // 方便incr，转换为分
 		"avatar":         p.Avatar,
 		"gender":         p.Gender,
 		"exp":            p.Exp,
@@ -237,37 +241,7 @@ func (rd *RedisDao) UpdatePlayerExData(playerId uint32, exData string) error {
 
 var ErrInsufficientPlayerCurrency = errors.New("insufficient player currency")
 
-var updatePlayerCurrencyScript = redis.NewScript(`
-if redis.call('HEXISTS', KEYS[1], 'id') == 0 then
-    return false
-end
-local current = redis.call('HGET', KEYS[1], 'currency')
-if not current then
-    return false
-end
-
--- 按整数位数和字典序比较，避免 Lua double 在超过 2^53 时丢失分的精度。
-local function less(a, b)
-    if #a ~= #b then
-        return #a < #b
-    end
-    return a < b
-end
-local delta = ARGV[1]
-if string.sub(delta, 1, 1) == '-' then
-    if string.sub(current, 1, 1) == '-' or less(current, string.sub(delta, 2)) then
-        return -1
-    end
-elseif string.sub(current, 1, 1) == '-' and less(delta, string.sub(current, 2)) then
-    return -1
-end
-
-redis.call('HINCRBY', KEYS[1], 'currency', delta)
-redis.call('HINCRBY', KEYS[1], 'exp', ARGV[2])
-redis.call('EXPIRE', KEYS[1], ARGV[3])
--- HINCRBY 的 Lua 返回值是 double，改读字符串以完整返回 int64 余额。
-return redis.call('HGET', KEYS[1], 'currency')
-`)
+var updatePlayerCurrencyScript = redis.NewScript(cashwallet.LegacyUpdate)
 
 // UpdatePlayerCurrency 在 Redis 内原子校验余额并更新，成功后再标记需要落地的玩家。
 func (rd *RedisDao) UpdatePlayerCurrency(playerId uint32, currencyDelta int64, exp, factory uint32, source int) (newCurrency int64, err error) {
@@ -335,35 +309,15 @@ func (rd *RedisDao) BatchGetPlayerCurrencys(ids []uint32) (map[uint32]int64, err
 
 // 批量修改玩家金币信息，只有再玩家登录后才能使用该接口 且 返回金币是未换算的值
 func (rd *RedisDao) BatchUpdatePlayerCurrencys(deltas map[uint32]int64) (map[uint32]int64, error) {
-	currencys := make(map[uint32]int64)
-	pipe := rd.cli.Pipeline()
-	ids := make([]uint32, 0, len(deltas))
+	balances := make(map[uint32]int64, len(deltas))
 	for id, delta := range deltas {
-		ids = append(ids, id)
-		pID := fmt.Sprintf("player_%d", id)
-		pipe.HIncrBy(context.Background(), pID, "currency", delta)
-	}
-	result, e := pipe.Exec(context.Background())
-	if e != nil {
-		return nil, e
-	}
-	for i, id := range ids {
-		sc := result[i].(*redis.IntCmd)
-		nc, err := sc.Result()
+		balance, err := rd.UpdatePlayerCurrency(id, delta, 0, 0, 0)
 		if err != nil {
-			continue
+			return balances, err
 		}
-		currencys[id] = nc
+		balances[id] = balance
 	}
-
-	//触发数据落地
-	pipe = rd.cli.Pipeline()
-	for id := range deltas {
-		pipe.SAdd(context.Background(), "dirty_list_imp", id)
-	}
-	pipe.Exec(context.Background())
-
-	return currencys, nil
+	return balances, nil
 }
 
 func (rd *RedisDao) GetUserStatData(id uint32) (decimal.Decimal, decimal.Decimal, decimal.Decimal, string, int32) {

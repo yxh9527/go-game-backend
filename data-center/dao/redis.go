@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"app/cashwallet"
 	"app/config"
 	"app/entity"
 	"app/esindex"
@@ -308,29 +309,16 @@ func (rd *RedisDao) IncrSerialIdSeed() (int64, error) {
 }
 
 func (rd *RedisDao) UpdatePlayerCurrencyAndExp(playerId uint32, currencyDelta int64, exp, factory uint32, source int) (newCurrency int64, err error) {
-	pID := "player_" + strconv.FormatUint(uint64(playerId), 10)
-	rd.Client.Expire(context.Background(), pID, time.Minute*20)
-	exist, err := rd.Client.HExists(context.Background(), pID, "id").Result() // 完整的player信息是否存在
-	if err == redis.Nil || (err == nil && !exist) {
-		return 0, redis.Nil
-	} else if err != nil {
-		return 0, err
-	}
-	currentCurrency, err := rd.Client.HGet(context.Background(), pID, "currency").Int64()
+	ctx := context.Background()
+	key := "player_" + strconv.FormatUint(uint64(playerId), 10)
+	balance, err := redis.NewScript(cashwallet.LegacyUpdate).Run(ctx, rd.Client, []string{key}, currencyDelta, exp).Int64()
 	if err != nil {
 		return 0, err
 	}
-	if currentCurrency+currencyDelta < 0 {
-		newCurrency = currentCurrency
-		return 0, fmt.Errorf("玩家分数更新后不能小于0。玩家ID:%s，玩家在redis中的游戏币数量：%d，更新量：%d", pID, currentCurrency, currencyDelta)
+	if balance == -1 {
+		return 0, fmt.Errorf("insufficient unreserved player currency: %d", playerId)
 	}
-	newCurrency, err = rd.Client.HIncrBy(context.Background(), pID, "currency", currencyDelta).Result()
-	if err != nil {
-		return 0, err
-	}
-	rd.Client.HIncrBy(context.Background(), pID, "exp", int64(exp))
-	rd.Client.SAdd(context.Background(), "dirty_list_imp", playerId)
-	return newCurrency, nil
+	return balance, nil
 }
 
 func (rd *RedisDao) UpdatePlayerLoginIPAndTime(playerId uint32, ip string) error {
@@ -361,10 +349,13 @@ func (rd *RedisDao) SetPlayer(p *services.HumanPlayer, refreshDB bool) error {
 	if exist {
 		return nil
 	}
+	if err := rd.Client.HSetNX(context.Background(), pID, "currency", decimal.RequireFromString(p.GameCurrency).Mul(decimal.New(1, 2)).IntPart()).Err(); err != nil {
+		return err
+	}
+
 	err = rd.Client.HSet(context.Background(), pID, map[string]interface{}{
 		"id":             p.Id,
 		"nickname":       p.Nickname,
-		"currency":       decimal.RequireFromString(p.GameCurrency).Mul(decimal.New(1, 2)).IntPart(), // 方便incr，转换为分
 		"avatar":         p.Avatar,
 		"gender":         p.Gender,
 		"exp":            p.Exp,

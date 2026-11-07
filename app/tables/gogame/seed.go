@@ -25,6 +25,9 @@ func ManagerModels() []any {
 
 func PlayerModels() []any {
 	return []any{
+		&PlayerPanelHand{},
+		&PlayerNote{},
+		&PlayerEmojiDaily{},
 		&TicketHold{},
 		&MatchPlayer{},
 		&MatchRoom{},

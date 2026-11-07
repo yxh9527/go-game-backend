@@ -23,10 +23,15 @@ type gogameRepository interface {
 type gogameStorageService struct {
 	services.UnimplementedGogameStorageServiceServer
 	db gogameRepository
+	es *dao.ESDao
 }
 
-func newGogameStorageService(db gogameRepository) *gogameStorageService {
-	return &gogameStorageService{db: db}
+func newGogameStorageService(db gogameRepository, sources ...*dao.ESDao) *gogameStorageService {
+	var es *dao.ESDao
+	if len(sources) > 0 {
+		es = sources[0]
+	}
+	return &gogameStorageService{db: db, es: es}
 }
 
 func gogameAuthorize(ctx context.Context) error {
@@ -66,7 +71,29 @@ func (d *gogameStorageService) Call(ctx context.Context, req *services.GogameSto
 	}
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	value, err := d.db.GogameCall(ctx, req.Operation, req.Payload)
+	var value any
+	var err error
+	if req.Operation == "userCenter" || req.Operation == "userCenterWrite" {
+		repository, ok := d.db.(*dao.DBDao)
+		if !ok || d.es == nil {
+			return nil, status.Error(codes.Unavailable, "user-center data source unavailable")
+		}
+		if req.Operation == "userCenter" {
+			var query dao.UserCenterQuery
+			if err = dao.DecodeGogameJSON(req.Payload, &query); err == nil {
+				value, err = repository.UserCenter(ctx, d.es, query)
+			}
+		} else {
+			var input struct {
+				Records []dao.UserCenterRecord `json:"records"`
+			}
+			if err = dao.DecodeGogameJSON(req.Payload, &input); err == nil {
+				value, err = repository.WriteUserCenter(ctx, d.es, input.Records)
+			}
+		}
+	} else {
+		value, err = d.db.GogameCall(ctx, req.Operation, req.Payload)
+	}
 	if err != nil {
 		return nil, gogameError(err)
 	}

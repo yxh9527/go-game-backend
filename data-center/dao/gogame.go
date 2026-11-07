@@ -186,6 +186,12 @@ func gogameNumber(value any) int64 {
 }
 
 func (dd *DBDao) GogameCall(ctx context.Context, operation, payload string) (any, error) {
+	switch operation {
+	case "playerPanelRead", "playerPanelWrite", "playerPanelNoteGet", "playerPanelNoteSet", "playerPanelQuota", "playerPanelGift":
+		return dd.gogamePlayerPanel(ctx, operation, payload)
+	case "cashRead", "cashApply":
+		return dd.gogameCash(ctx, operation, payload)
+	}
 	var args GogameArgs
 	if err := DecodeGogameJSON(payload, &args); err != nil {
 		return nil, err

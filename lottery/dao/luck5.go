@@ -88,6 +88,21 @@ func (rd *RedisDao) Luck5DealResult(ctx context.Context, request *Luck5Round) (*
 
 // 资金事务同时提交钱包、原池统计和阶段结果；只在成功确认后推进内存缓存。
 func (rd *RedisDao) commitLuck5Funds(ctx context.Context, agent *AgentData, round *Luck5Round, settle bool) (services.ErrorCode, error) {
+	playerKey := fmt.Sprintf("player_%d", round.UserId)
+	carryKey := fmt.Sprintf("gogame:cash-carry:%d:%d:%s", round.AgentId, round.UserId, round.CurrencyType)
+	before := *round
+	code := services.ErrorCode_SYSTEM_ERROR
+	err := rd.cli.Watch(ctx, func(tx *redis.Tx) error {
+		var err error
+		code, err = rd.commitLuck5FundsTx(ctx, tx, agent, round, settle)
+		return err
+	}, playerKey, carryKey, luck5Key(round.RoundId))
+	if err != nil {
+		*round = before
+	}
+	return code, err
+}
+func (rd *RedisDao) commitLuck5FundsTx(ctx context.Context, cli redis.Cmdable, agent *AgentData, round *Luck5Round, settle bool) (services.ErrorCode, error) {
 	playerKey := "player_" + strconv.FormatUint(uint64(round.UserId), 10)
 	roundKey := luck5Key(round.RoundId)
 	game := agent.GetGame(round.Symbol)
@@ -111,7 +126,7 @@ func (rd *RedisDao) commitLuck5Funds(ctx context.Context, agent *AgentData, roun
 		}
 	}
 	code := services.ErrorCode_SYSTEM_ERROR
-	storedRaw, readErr := rd.cli.Get(ctx, roundKey).Result()
+	storedRaw, readErr := cli.Get(ctx, roundKey).Result()
 	if readErr != nil && !errors.Is(readErr, redis.Nil) {
 		return code, readErr
 	}
@@ -123,7 +138,14 @@ func (rd *RedisDao) commitLuck5Funds(ctx context.Context, agent *AgentData, roun
 	} else if readErr == nil {
 		return code, errors.New("round already exists")
 	}
-	current, err := rd.cli.HGet(ctx, playerKey, "currency").Int64()
+	revision, revisionErr := cli.HGet(ctx, playerKey, "cash_revision").Int64()
+	if revisionErr != nil && !errors.Is(revisionErr, redis.Nil) {
+		return code, revisionErr
+	}
+	if revision < 0 || revision >= 9007199254740991 {
+		return code, errors.New("invalid balance revision")
+	}
+	current, err := cli.HGet(ctx, playerKey, "currency").Int64()
 	if err != nil {
 		return code, err
 	}
@@ -138,7 +160,20 @@ func (rd *RedisDao) commitLuck5Funds(ctx context.Context, agent *AgentData, roun
 		round.Balance = current + round.WinCent
 		round.FundsDone = true
 	} else {
-		if current < round.BetCent {
+		reserved := int64(0)
+		carryKey := fmt.Sprintf("gogame:cash-carry:%d:%d:%s", round.AgentId, round.UserId, round.CurrencyType)
+		carryRaw, carryErr := cli.Get(ctx, carryKey).Result()
+		if carryErr != nil && !errors.Is(carryErr, redis.Nil) {
+			return code, carryErr
+		}
+		if carryErr == nil {
+			var carry struct{ Amount int64 }
+			if e := jsoniter.UnmarshalFromString(carryRaw, &carry); e != nil {
+				return code, e
+			}
+			reserved = carry.Amount
+		}
+		if reserved < 0 || reserved > current || current-reserved < round.BetCent {
 			code = services.ErrorCode_NO_ENOUGH_MONEY
 			return code, errors.New("balanceInsufficient")
 		}
@@ -149,8 +184,8 @@ func (rd *RedisDao) commitLuck5Funds(ctx context.Context, agent *AgentData, roun
 	if err != nil {
 		return code, err
 	}
-	_, err = rd.cli.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
-		pipe.HSet(ctx, playerKey, "currency", round.Balance)
+	_, err = cli.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+		pipe.HSet(ctx, playerKey, "currency", round.Balance, "cash_revision", revision+1)
 		pipe.Expire(ctx, playerKey, 20*time.Minute)
 		pipe.SAdd(ctx, "dirty_list_imp", round.UserId)
 		pipe.Set(ctx, roundKey, raw, 0)
