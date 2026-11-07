@@ -5,6 +5,7 @@ import (
 	"app/entity"
 	"app/esindex"
 	"context"
+	"errors"
 	"fmt"
 	"lottery/event"
 	"lottery/util"
@@ -234,44 +235,54 @@ func (rd *RedisDao) UpdatePlayerExData(playerId uint32, exData string) error {
 	return err
 }
 
+var ErrInsufficientPlayerCurrency = errors.New("insufficient player currency")
+
+var updatePlayerCurrencyScript = redis.NewScript(`
+if redis.call('HEXISTS', KEYS[1], 'id') == 0 then
+    return false
+end
+local current = redis.call('HGET', KEYS[1], 'currency')
+if not current then
+    return false
+end
+
+-- 按整数位数和字典序比较，避免 Lua double 在超过 2^53 时丢失分的精度。
+local function less(a, b)
+    if #a ~= #b then
+        return #a < #b
+    end
+    return a < b
+end
+local delta = ARGV[1]
+if string.sub(delta, 1, 1) == '-' then
+    if string.sub(current, 1, 1) == '-' or less(current, string.sub(delta, 2)) then
+        return -1
+    end
+elseif string.sub(current, 1, 1) == '-' and less(delta, string.sub(current, 2)) then
+    return -1
+end
+
+redis.call('HINCRBY', KEYS[1], 'currency', delta)
+redis.call('HINCRBY', KEYS[1], 'exp', ARGV[2])
+redis.call('EXPIRE', KEYS[1], ARGV[3])
+-- HINCRBY 的 Lua 返回值是 double，改读字符串以完整返回 int64 余额。
+return redis.call('HGET', KEYS[1], 'currency')
+`)
+
+// UpdatePlayerCurrency 在 Redis 内原子校验余额并更新，成功后再标记需要落地的玩家。
 func (rd *RedisDao) UpdatePlayerCurrency(playerId uint32, currencyDelta int64, exp, factory uint32, source int) (newCurrency int64, err error) {
+	ctx := context.Background()
 	pID := "player_" + strconv.FormatUint(uint64(playerId), 10)
-	pipe := rd.cli.Pipeline()
-	pipe.HExists(context.Background(), pID, "id").Result() // 完整的player信息是否存在
-	pipe.Expire(context.Background(), pID, time.Minute*20)
-	pipe.HGet(context.Background(), pID, "currency")
-	result, err := pipe.Exec(context.Background())
+	newCurrency, err = updatePlayerCurrencyScript.Run(ctx, rd.cli, []string{pID}, currencyDelta, exp, 1200).Int64()
 	if err != nil {
 		return 0, err
 	}
-	rb := result[0].(*redis.BoolCmd)
-	exist, err := rb.Result()
-	if err == redis.Nil || (err == nil && !exist) {
-		return 0, redis.Nil
-	} else if err != nil {
-		return 0, err
+	if newCurrency == -1 {
+		return 0, ErrInsufficientPlayerCurrency
 	}
-	cr := result[2].(*redis.StringCmd)
-	currentCurrency, err := cr.Int64()
-	if err != nil {
-		return 0, err
-	}
-	if currentCurrency+currencyDelta < 0 {
-		newCurrency = currentCurrency
-		return 0, fmt.Errorf("玩家分数更新后不能小于0。玩家ID:%s,玩家在redis中的游戏币数量:%d,更新量：%d", pID, currentCurrency, currencyDelta)
-	}
-	pipe = rd.cli.Pipeline()
-	pipe.HIncrBy(context.Background(), pID, "currency", currencyDelta)
-	pipe.HIncrBy(context.Background(), pID, "exp", int64(exp))
-	pipe.SAdd(context.Background(), "dirty_list_imp", playerId)
-	result, err = pipe.Exec(context.Background())
-	if err != nil {
-		return 0, err
-	}
-	crr := result[0].(*redis.IntCmd)
-	newCurrency, err = crr.Result()
-	if err != nil {
-		return 0, err
+	if err := rd.cli.SAdd(ctx, "dirty_list_imp", playerId).Err(); err != nil {
+		// 余额已更新成功，标记失败不能作为扣款失败返回，避免调用方再次扣款。
+		zap.L().Error("标记玩家余额落地失败", zap.Uint32("playerId", playerId), zap.Error(err))
 	}
 	return newCurrency, nil
 }

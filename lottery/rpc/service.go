@@ -9,6 +9,7 @@ import (
 	"app/tables/player"
 	"context"
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"lottery/dao"
 	"strconv"
@@ -370,18 +371,16 @@ func (d *LotteryService) BulkPoolLog(data []*view.PoolLogItem) error {
 
 func (d *LotteryService) updatePlayerCurrency(id uint32, delta int64) (int64, services.ErrorCode) {
 	newCurrency, err := d.rds.UpdatePlayerCurrency(id, delta, 0, 0, 0)
-	if err != nil {
-		if err == redis.Nil {
-			if code := d.loadPlayerToCache(id); code != services.ErrorCode_OK {
-				return 0, code
-			}
-			newCurrency, err = d.rds.UpdatePlayerCurrency(id, delta, 0, 0, 0)
-			if err != nil {
-				zap.L().Error("update player currency failed", zap.Any("id", id), zap.Error(err))
-				return 0, services.ErrorCode_SYSTEM_ERROR
-			}
-			return newCurrency, services.ErrorCode_OK
+	if errors.Is(err, redis.Nil) {
+		if code := d.loadPlayerToCache(id); code != services.ErrorCode_OK {
+			return 0, code
 		}
+		newCurrency, err = d.rds.UpdatePlayerCurrency(id, delta, 0, 0, 0)
+	}
+	if errors.Is(err, dao.ErrInsufficientPlayerCurrency) {
+		return 0, services.ErrorCode_NO_ENOUGH_MONEY
+	}
+	if err != nil {
 		zap.L().Error("update player currency failed", zap.Any("id", id), zap.Error(err))
 		return 0, services.ErrorCode_SYSTEM_ERROR
 	}

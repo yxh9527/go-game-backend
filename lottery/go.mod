@@ -3,6 +3,7 @@ module lottery
 go 1.24.0
 
 require (
+	github.com/alicebob/miniredis/v2 v2.35.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/json-iterator/go v1.1.12
 	github.com/olivere/elastic/v7 v7.0.32
@@ -30,6 +31,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
+	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
