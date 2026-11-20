@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/finance_report_snapshot_test.go",
+      "before": "8300e7aa274688c512f5ee34567010de949a922e8b86d257ca4bd2b9a8e12346",
+      "after": "f7308ed6c57dc75eea845aaa2aa715db162304105e6ab7fa44c485f6d302771c"
+    },
+    {
+      "path": "lottery/dao/finance_round_retention_test.go",
+      "before": null,
+      "after": "19e51dd09e8e0d5335c81eaa7fc4745263f570738b7faceed38cbb96231c0c1c"
+    },
+    {
+      "path": "lottery/dao/finance_round_retention.go",
+      "before": null,
+      "after": "f3bee166e0f1c61b3b269e75a3e83f322c0e685452318d725eae1dcd5dddd5b2"
+    },
+    {
+      "path": "lottery/unified/banker_net.go",
+      "before": "5d9985e9d1ee686e9ac736014dafd76ddbf33f8d4188d6cfe2d2c4b21575233a",
+      "after": "f5a1bd5d502eb164f1ed211bf4dd750929d4794ea110967d8380d0622a759230"
+    },
+    {
+      "path": "lottery/unified/round_retention_test.go",
+      "before": null,
+      "after": "3cd82753f335bf37d3fd1605cfd306b0559431aaeade53455d388cce4e7c8f33"
+    },
+    {
+      "path": "lottery/unified/seat_net.go",
+      "before": "ecb6b31ff39514386bad189904c9e877a93110d36baf9bead20c5fad03fc7af5",
+      "after": "dd5079fe2bd784524c387e54416255c4886497de61f1b20a7aa1dffe79aeffdf"
+    },
+    {
+      "path": "lottery/unified/service_test.go",
+      "before": "ef9cd5a0ede9bf8c79e87ac2d82b44a27534d5a4f647aad40e8f999c84f69732",
+      "after": "a1a4b93bd2b2c23ddee6064193a9c36b4781d79cafc08bc42b13d206436cdc97"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "c3942ae86b7c9e3f25123ab1847c5820799c5140baee9e7ba7ac3fd88b57d40f",
+      "after": "70a314475f321997f0f78fa1a81c9fb9e18c326b6dfbc951d7b895a4916c1b8b"
+    },
+    {
+      "path": "lottery/unified/settlement_bills_test.go",
+      "before": null,
+      "after": "ef0feda76ba2f91545dbcf08a3f81b9d7675d2c92c4cc0dc2752eca6deedd333"
+    },
+    {
+      "path": "lottery/unified/settlement_bills.go",
+      "before": null,
+      "after": "0d6fc1a62fdcccef7d800202e5b0d1891dd4c34e8425e12ed58ae2586b0147ad"
+    },
+    {
+      "path": "lottery/unified/settlement_reports_test.go",
+      "before": "2c462dc90ed2330cd90be528d0ef8beb349b8e21112b5b7cb091039e4030c245",
+      "after": "6821df30a42c0f9724af1ff7d1abced7a3adb30107bf0539859b4cbc27cca409"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "4608fd67889d8cfa256f30be0927e81aa03f010c0b57b47abf2e1337b9ce57b2",
+      "after": "96205650bf17ecc8b06a47fda542c6554f896117c4a114e71b0788427af1049a"
+    }
+  ]
+}

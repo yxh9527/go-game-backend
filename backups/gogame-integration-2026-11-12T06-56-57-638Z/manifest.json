@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/unified/scratch_display_report_test.go",
+      "before": null,
+      "after": "0c36828006b906566f87c98beda06c7931e16822c99363a99f83eb365d394471"
+    },
+    {
+      "path": "lottery/unified/scratch_display_report.go",
+      "before": null,
+      "after": "17d8702e61b360a3db5f309527e69c692c87cc4a57a358faf2bfab2e27f31892"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "bd4bd069cff5996b8b6bcfcdd4fa6cae63f52541850ffb216228644f45be6512",
+      "after": "2e36c4450aae234660d809f0332a3fbfc75de1a65a6d11e45ede70a30954dcaa"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "01e6324365a4d3ab57431b0966be341369ece671c3b29b1592f7ef0035818889",
+      "after": "4608fd67889d8cfa256f30be0927e81aa03f010c0b57b47abf2e1337b9ce57b2"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/scratch_legacy_retention_test.go",
+      "before": null,
+      "after": "4a17dd112cf394023d6691b9461866956c756dda8889019c275e29597104a4bf"
+    },
+    {
+      "path": "lottery/dao/scratch_legacy_retention.go",
+      "before": null,
+      "after": "1a900e059a46f3a12d12aac08c2cd1741fc618fd5c9047d6c67d7a048bed71fa"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "01f958e23708df975ef04fdf701bcac71a2e8bd8a8236852e6718fda71f964fc",
+      "after": "b58f6e4870795009ea00ce2e41c31f6c1ab72b92ec1843304c2fc8ca5e6a96c1"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/settlement_history_test.go",
+      "before": null,
+      "after": "7820a8a0be67789545e068d45d7bf5559eb7e0612339bf63841f7b2bceb7d9d5"
+    },
+    {
+      "path": "data-center/dao/settlement_history.go",
+      "before": null,
+      "after": "274b46dbc418340d3df8f587198ca0de3ad217de7a115334ab204a039285b8dc"
+    },
+    {
+      "path": "data-center/dao/user_center_test.go",
+      "before": "0431221d20f8bd42ef1cf22c93ccf9fdf47d97677b405c17969c802ba9d3fa93",
+      "after": "743ac9505bc57de373a8c6a04df1b740aca5eec38a5d6aa6a29126e669bc9d7e"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "06c68dec2e7c298ca6ff01a1ac7b72be22d469fb4e95a0c73d42995f52bd6ed8",
+      "after": "a7cde30a6c10aeaa032854a9598412b3794bb02dbe27d28da9ae6e2853c38a19"
+    }
+  ]
+}

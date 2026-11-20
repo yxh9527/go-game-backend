@@ -1,0 +1,131 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/user_center_es_identity.go",
+      "before": null,
+      "after": "9da09e7378756d5daddc3f0a78376afd5dd0a7368b7c4465114862e435f8950a"
+    },
+    {
+      "path": "data-center/dao/user_center_reports_test.go",
+      "before": "211f426e17e9ade96ae52064dd22c25b915c6c5eb03bbe4a49e17f34fdec2727",
+      "after": "800aed210ab3d8e4d7f245569c721b121ffb10f7189ad04eda6e9c19957a8a82"
+    },
+    {
+      "path": "data-center/dao/user_center_reports.go",
+      "before": "132c672075b4febd94eaa0abeb971c07d794f58ad0edd53d8f1921315b805c11",
+      "after": "0258eb6f716b07e6f49f9920e9b45a25f86bac836d4814096ab033a8bab79004"
+    },
+    {
+      "path": "data-center/dao/user_center_test.go",
+      "before": "743ac9505bc57de373a8c6a04df1b740aca5eec38a5d6aa6a29126e669bc9d7e",
+      "after": "ea32657b00137c39ea496f5038b23c922294ba3ff02674ca89c97e07de0655ff"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "13fbd0406e3bdc2c96711841e8db59227991c9b1f247ea8a2f08a8a424edc3a3",
+      "after": "1efd297d19e0b15884a5bb9e9b3c9b289a5d58d9941c65820c4f3071e3194c8a"
+    },
+    {
+      "path": "data-center/rpc/service_gogame.go",
+      "before": "7a7a1d31747f9fb3e7c4628cf224bb3e1eb4a9857cb115e92f2aaccfb0bca2c2",
+      "after": "bb24793801cd2920c6b53d1ebc0331e6dfe67280cd9afab73132277d0d524912"
+    },
+    {
+      "path": "lottery/dao/final_record_backpressure_test.go",
+      "before": "bed6fcbe8a9aafe58ffbbcc651f04aaa5a1f2533892b78e903ab8a8389ed28f5",
+      "after": null
+    },
+    {
+      "path": "lottery/dao/final_record_backpressure.go",
+      "before": "ed7e82eeb925bbe2c2071d9f3a893a595d346732329e8d5ac3afa39cccfbd1af",
+      "after": null
+    },
+    {
+      "path": "lottery/dao/final_record_store_test.go",
+      "before": "078d10e30461485c7a0cdc3eada79e2968099634969476983a5267c7a8ab5db9",
+      "after": null
+    },
+    {
+      "path": "lottery/dao/final_record_store.go",
+      "before": "99747f9595c6871e9fc1b26f8143969109045417524376646eec59455d3895c2",
+      "after": null
+    },
+    {
+      "path": "lottery/rpc/record_storage_admission_test.go",
+      "before": "88dd7323d0edd19e3ca80f36f045671549e9a1ef9097b42fde549effb012140a",
+      "after": "2c0e9ce92681299423ef037ad7a43c8c455e90620e4daa1b17676d9bc738013e"
+    },
+    {
+      "path": "lottery/rpc/record_storage_admission.go",
+      "before": "6631e252988e6b629b68c73c3eb48a078c05485a328d459f3e5049cdbe8fd719",
+      "after": "88aa61f136758dabf96dbd6ae0f3d97f3004f80e534100fb7e5df679db57d07a"
+    },
+    {
+      "path": "lottery/rpc/service.go",
+      "before": "9d87a055d87689fe4f69464f0009753e85c9dd0e4d63ad74d6643055852c9a93",
+      "after": "6cdb6b21e86fcee1e8055ecfd286a2d260c99ca94d57e2167d218de761f2a329"
+    },
+    {
+      "path": "lottery/unified/direct_es_reports_test.go",
+      "before": null,
+      "after": "cc3951e9ac06f39fb6e5f1da4ec0c349a3e3939fe1777fdaca6e5d2152cc0ea2"
+    },
+    {
+      "path": "lottery/unified/normal_settlement_bills_test.go",
+      "before": "a80650e9fc81bc89ce4c39cd2b569eedb20b111a2459e48f2fcb182016f59267",
+      "after": "46b7e0a9e3a15d6a78335dd8005d7de4bdfafc7565f841eae5ef1862c081b252"
+    },
+    {
+      "path": "lottery/unified/record_storage_admission_test.go",
+      "before": "2b275bfcdadeaf0ba405cf0a9400d2847625f192649bf6ebf8a20a53c6656e6b",
+      "after": "ebf5cc7f581103cc18a7be0355002a5b8fd32fdb478e95c918cbd640fb0a8814"
+    },
+    {
+      "path": "lottery/unified/scratch_display_report_test.go",
+      "before": "69d3239af92e71b6c81e0f2c10edfdb15205ccc8badcca1deafb55e37d81e36d",
+      "after": "0c36828006b906566f87c98beda06c7931e16822c99363a99f83eb365d394471"
+    },
+    {
+      "path": "lottery/unified/scratch_test.go",
+      "before": "add522b3dfc1f89e32e6e6398e98f8d2a6eae5bbe7e28e6c77e8806a5611c718",
+      "after": "2424a20628c421738d1ca08a430bfb648b632ed0748a2089a806ec5d748697e8"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "e9e783461c4394831a5c4f25f0fcecca2182ec9c52578cbdae2e541f0ddb2409",
+      "after": "5d82ff6b11a3b44d5fde27ea5e9611ade1257eedf45afa71697fcf684268815f"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "19880d3b7263cd936c0fad543675a430944583a7e1880027f8d6f1df30f55d8b",
+      "after": "c9a44d8d0e0e4b0e18c7fdbf7486faeae182931d124cd157367283d11ab821ab"
+    },
+    {
+      "path": "lottery/unified/settlement_bills_test.go",
+      "before": "1d003587b8ffa9dcbccf6cac131c41dea49851b112fb639e0ddaa48a4d258cd0",
+      "after": "ef0feda76ba2f91545dbcf08a3f81b9d7675d2c92c4cc0dc2752eca6deedd333"
+    },
+    {
+      "path": "lottery/unified/settlement_bills.go",
+      "before": "e89a8e3aedd94e4ed7ffbdf4b15e2990d55d35249eb9b54efc99257534147b3c",
+      "after": "57d2019cd47390f178bc702e113d62f4c3af0fe6b8194b7b1335e31100ac5731"
+    },
+    {
+      "path": "lottery/unified/settlement_report_sql_test.go",
+      "before": "acc566c57ce0070423dc8955d3ef8e5ef4e2afed6ffb5e68136c42071110767c",
+      "after": null
+    },
+    {
+      "path": "lottery/unified/settlement_reports_test.go",
+      "before": "e518459265cf1b296768aaf285762b8910b463af090952e1d53d90a8ba9659a4",
+      "after": "6821df30a42c0f9724af1ff7d1abced7a3adb30107bf0539859b4cbc27cca409"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "558a5ef30fbb031e3aa885da6a0412a8f66815a12a6f9e03fd0863979bb4402b",
+      "after": "1422cdd378b4da7fa7abc47f6f0d76fd9412f4bec2054ddcad51ef4b4f20cac0"
+    }
+  ]
+}

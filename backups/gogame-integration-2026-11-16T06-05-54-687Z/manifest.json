@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/player_panel_totals_test.go",
+      "before": "5e80437cdca9f37baa23de02ed90ec57d6bfd0108409b59719834e7975abf143",
+      "after": "1848a64e2689155d2acbed17095d5668cd7f2758fc61e4aec106447b26f4f64f"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals.go",
+      "before": "39249e03d82c1fbf7c1557ddd0ba6e615197f329824d31209cae6ac570abae7a",
+      "after": "ade6d8ef2a4b639de92c5fe4dba4666eb8a304ce934a1d86e4625f7f99cacaa9"
+    }
+  ]
+}

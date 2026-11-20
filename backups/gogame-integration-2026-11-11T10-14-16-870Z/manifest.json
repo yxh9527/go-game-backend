@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "date": "2026-11-11",
+  "files": [
+    {
+      "path": "app/batchwriter/writer_test.go",
+      "before": null,
+      "after": "94033d0ad87bcdb87277af8720330032b3aa3a899ce6f1bbed7c4b2cb1fa7f0c"
+    },
+    {
+      "path": "app/batchwriter/writer.go",
+      "before": null,
+      "after": "55d1b7ddc6a32e3904e2d6f5c957c3a605536fc73c422aea523d622033f8fba6"
+    },
+    {
+      "path": "data-center/dao/es_batch_test.go",
+      "before": null,
+      "after": "6613f9e7768cc21455b39ed1e317e2c5d491f4c5e9f68735ca9f7d12dda1a39b"
+    },
+    {
+      "path": "data-center/dao/es.go",
+      "before": "7efbcb5afb9c0f56e8d5106c0444a83264e3f4ca3e3001fe5c98de5fb1430ba5",
+      "after": "a4e3f787335e0a13c54813eaf307591a6dedf156faa16572e5f7332968d52386"
+    },
+    {
+      "path": "data-center/dao/gogame_blinds_test.go",
+      "before": null,
+      "after": "b22305f21de16ab63c84fcab931b58532d63441c8dba963b26fd92e8871af2f0"
+    },
+    {
+      "path": "data-center/dao/gogame_blinds.go",
+      "before": null,
+      "after": "1d5f65539b34e6b557e6381099fbb39d7e0bc6cfb0c2d8f36dc33c066ec4bd87"
+    },
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "0889d8c35e55828c8bd11778ac3f54eb8792e203d1ffd76205214bfe4ca07e05",
+      "after": "c055963410630fa7619a6e1d0c232dca92e446e469ab9f9b0966256c6cb79cbf"
+    },
+    {
+      "path": "data-center/rpc/service.go",
+      "before": "9c5110be9b6704b72a3a3f03f1674eb72bc693e1eccb7c70bb74ff328c2abb6e",
+      "after": "24f6f80becc63cdabf884b601a37276eff2187a2bb3c5d97867c11fc7744abae"
+    },
+    {
+      "path": "lottery/dao/es_batch_test.go",
+      "before": null,
+      "after": "6613f9e7768cc21455b39ed1e317e2c5d491f4c5e9f68735ca9f7d12dda1a39b"
+    },
+    {
+      "path": "lottery/dao/es.go",
+      "before": "99d2a631dcf56e931186cdb63b4f30d658716b2a8979c786ff65e3c097532571",
+      "after": "6b00700ee8c62763630cf5fc40523b8362aadc0cb9461c5cbe5d9b5156ba3121"
+    },
+    {
+      "path": "lottery/rpc/service.go",
+      "before": "b6158d0db431033247175a65f9301fd4164d9ca04715540d0c6d6c7ab76a0daf",
+      "after": "a375f8a5ab1966066eca00b68a62d838ef3b98d0ea9815305defe72c84880419"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "46fffcf2e27768efad75aa6dd070d475e14db93cc7a68318af681f975b0a7d7f",
+      "after": "97f85ae432231ad34ca12e7a39497169579571bade1713cd8515bcb61770609b"
+    }
+  ]
+}

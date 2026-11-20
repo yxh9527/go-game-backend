@@ -6,6 +6,7 @@ package base;
 
 enum error_code {
     OK = 0;
+    ROUND_NOT_FOUND = 10;
     GAME_FROZEN = 1;//游戏暂停服务
     AGENT_FROZEN = 2;//代理被冻结
     SYSTEM_ERROR = 3;//系统错误

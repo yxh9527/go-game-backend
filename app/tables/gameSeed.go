@@ -8,7 +8,7 @@ type GameSeedItem struct {
 	TypeName string // slots / fruits / ug5，对应 gp_game_type.name
 }
 
-// DefaultGameSeeds 依据新服 gameIds + recordGameNameConfig 整理，共 142 款。
+// DefaultGameSeeds 依据新服 gameIds + recordGameNameConfig 整理，共 141 款。
 func DefaultGameSeeds() []GameSeedItem {
 	return []GameSeedItem{
 		// slots: 118
@@ -131,7 +131,7 @@ func DefaultGameSeeds() []GameSeedItem {
 		{3325, "百变猴子2", "mcm2", "slots"},
 		{3326, "森林舞会2", "mslwh2", "slots"},
 
-		// fruits: 16
+		// fruits: 15
 		{7000, "水果机", "frt", "fruits"},
 		{7001, "飞禽走兽", "bbs", "fruits"},
 		{7002, "奔驰宝马", "bzb", "fruits"},
@@ -139,7 +139,6 @@ func DefaultGameSeeds() []GameSeedItem {
 		{7009, "水果转盘", "fw", "fruits"},
 		{7010, "三国赛马", "hr", "fruits"},
 		{7011, "连环夺宝", "si", "fruits"},
-		{7012, "幸运5", "lucky", "fruits"},
 		{7015, "猴子爬树", "mr", "fruits"},
 		{7016, "浮岛历险记", "fia", "fruits"},
 		{7017, "水果传奇", "fl", "fruits"},

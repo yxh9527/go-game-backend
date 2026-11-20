@@ -1,0 +1,101 @@
+{
+  "format": 1,
+  "date": "2026-11-11",
+  "files": [
+    {
+      "path": "app/cfgparse/parse_test.go",
+      "before": "c0a6910ef54782a0a3f84e0c50830af0007cec9ffc83141ced4ac88776da1730",
+      "after": "13baf1bdcfaf919ed43802c8cce5725a22fe00d0661233ed4f1924df677a80e8"
+    },
+    {
+      "path": "app/esindex/esindex_test.go",
+      "before": "f0ce39861ef836566d5baee1c63249165d49a9bda7d1f842ebba27c0306b4921",
+      "after": "c8484b83d299756bae2b1a42274b83f91bfeedeeec46492b3aea0b0d92727ede"
+    },
+    {
+      "path": "app/tables/gogame/fair_proof.go",
+      "before": null,
+      "after": "f898e6fa4786c7df2457fad8a203133bff24f7300d6b0fa22f3839ec2a956c54"
+    },
+    {
+      "path": "app/tables/gogame/seed.go",
+      "before": "3ebd648421a727324b1650f2b9199dfef32bfe20f2c5009223e46f5758b7db85",
+      "after": "32c35e8f2336b3d189be296889b052e904d9a6c9fee9297a661d2e75710e579a"
+    },
+    {
+      "path": "app/tables/gogame/smart_task.go",
+      "before": null,
+      "after": "d44dcb90392826d0138e9bf4f6beed27fbe2505f699d3ca7c806db53cbe5e38f"
+    },
+    {
+      "path": "app/tables/gogame/ticket.go",
+      "before": "0f806dae748885c67d37a4214a69592b592ecf96c8e3161e7d7b4b6d66c9b66d",
+      "after": "daaeac4f5e76fed4d6ee833e9a0608c42e7872b5b27ff6fd50a742b0c2c3ec57"
+    },
+    {
+      "path": "data-center/dao/fair_proof_test.go",
+      "before": null,
+      "after": "e09234370d6d119532273708558841a80d88595dc8fea86852af7079152f2a56"
+    },
+    {
+      "path": "data-center/dao/fair_proof.go",
+      "before": null,
+      "after": "e055bdc703c1b39019f479705bb4347a2bdd3cdb658e82b9d45f3bcd379ab4e2"
+    },
+    {
+      "path": "data-center/dao/gogame_match_admin.go",
+      "before": null,
+      "after": "04c156b335aed1465a9de749cfc193fcf8a63b5f8828d94b06ac56b9544e0272"
+    },
+    {
+      "path": "data-center/dao/gogame_payments_test.go",
+      "before": "d79f52bae31dac17ac6514c68e1b9704fd7a600d9bf724fbd49e3430205327a6",
+      "after": "dc1c41c1fe3db04a7aef63d1e225c850e9db5c10d14891f2ac5e646b9e6f3c26"
+    },
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": "08b1e4dd935e8e23de213f397f4cc5e0fb5b854c176b66ceb838701b9acbe9e1",
+      "after": "977514e99f1b6b12fcc432e42a7b491cf3c25c8e72f8e68b037ba4e44dd1b686"
+    },
+    {
+      "path": "data-center/dao/gogame_ticket_admin_test.go",
+      "before": null,
+      "after": "e655ef579f396fd8ac24a748e872154913f9292c80a4406c38676b99e108f5c2"
+    },
+    {
+      "path": "data-center/dao/gogame_ticket_admin.go",
+      "before": null,
+      "after": "6c15a531f75f1161c0e8c81265d9349815fb21aac69df90dc580f1b4419c6ac2"
+    },
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "c055963410630fa7619a6e1d0c232dca92e446e469ab9f9b0966256c6cb79cbf",
+      "after": "fb60d42d4a1512530b8ad662cf3ab95f3dc3bd0c90cc08a3aaf71525778f6a08"
+    },
+    {
+      "path": "data-center/dao/smart_task.go",
+      "before": null,
+      "after": "7aee21cd7b72994650371fb2452114fed1fc41549cc554352693fc429933cfde"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "30d279436307e1f7ecab6fbaf7fa43eb76cb8d044bcdc07ddca2bed2951b12b3",
+      "after": "268ef153ba624ae5e8084669936771daec9123f0b3dac1b33e35e02549bf2e89"
+    },
+    {
+      "path": "data-center/rpc/service_gogame.go",
+      "before": "fb4cde781fcf79f828dd6cc641e3a6a263b3f42bb7e60ddcef40d0d41cdc853c",
+      "after": "33a53e7b1697aac24d6b8093896422e668b2232294fbc0f30d026c0da5100991"
+    },
+    {
+      "path": "lottery/unified/banker_net_test.go",
+      "before": "cbe4c257209d8dbd560ead6253793f0dd4830797a478da9f0cd594800147e3f0",
+      "after": "5551a9fda4d4457ec64566f5815238b275ad5d264c83ab1703e91fad33ccbbd0"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "97f85ae432231ad34ca12e7a39497169579571bade1713cd8515bcb61770609b",
+      "after": "e8ac4c12bde68ebdba3e50d10edca037a8739e1f39fb9d7a5dce88ff6c0359b8"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+﻿redis:
+  host:
+    - "172.21.211.214:6379"
+  user: ""
+  pwd: ""
+mysql:
+  player:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_player"
+  manager:
+    host: "172.21.211.214"
+    user: "root"
+    port: 3306
+    password: "yxh2362023!@#"
+    database: "fg_web_manager"
+elastic:
+  hosts:
+    - "http://172.21.211.214:9200"
+  username: "elastic"
+  password: "000000"
+#对外提供服务的当前服务器外网或内网ip
+server_ip: "172.21.211.214"
+#对外提供服务的当前服务器端口
+server_port: 11034
+#日志保存路径
+log: ""

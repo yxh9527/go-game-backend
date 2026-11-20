@@ -1,0 +1,21 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/smart_task_attempt.go",
+      "before": "e980c9d30f72d82a5bf42c9596836903ed8634c989864825075a2dfbe887650a",
+      "after": "546ec05ebc795c4982a4d9edc6ff545f800780c030733be9c6dbdf195821492d"
+    },
+    {
+      "path": "data-center/dao/smart_task_refund_test.go",
+      "before": null,
+      "after": "c3f9c8c57665d390e46238b7fb1d0220535b7636b9d960122653dc00e9f5e2fa"
+    },
+    {
+      "path": "data-center/dao/smart_task_refund.go",
+      "before": null,
+      "after": "a4ffbf9e3a5076788373e6768ce894d1ffe6f4ba6d3ea08fd66a9c66857c4375"
+    }
+  ]
+}

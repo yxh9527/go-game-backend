@@ -25,13 +25,15 @@ type LoginResult struct {
 }
 
 type GameListItem struct {
-	Id       int    `json:"id"`
-	Number   int    `json:"number"`
-	Symbol   string `json:"symbol"`
-	Name     string `json:"name"`
-	NameZH   string `json:"nameZH"`
-	GameType int    `json:"gameType"`
-	Status   int    `json:"status"`
+	ClientGameType *uint32 `json:"clientGameType,omitempty"`
+	RoomType       *uint32 `json:"roomType,omitempty"`
+	Id             int     `json:"id"`
+	Number         int     `json:"number"`
+	Symbol         string  `json:"symbol"`
+	Name           string  `json:"name"`
+	NameZH         string  `json:"nameZH"`
+	GameType       int     `json:"gameType"`
+	Status         int     `json:"status"`
 }
 
 type LinkAgentData struct {

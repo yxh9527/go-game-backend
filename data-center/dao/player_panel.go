@@ -18,22 +18,45 @@ import (
 )
 
 type playerPanelRecord struct {
-	ID            string          `json:"id"`
-	AgentID       uint32          `json:"agentId"`
-	UserID        uint32          `json:"userId"`
-	Currency      string          `json:"currency"`
-	RoomID        int64           `json:"roomId"`
-	Inning        int64           `json:"inning"`
-	EndedAt       int64           `json:"endedAt"`
-	Net           int64           `json:"net"`
-	EffectiveBet  int64           `json:"effectiveBet"`
-	PlayMode      int             `json:"playMode"`
-	Players       json.RawMessage `json:"players"`
-	CommonCards   json.RawMessage `json:"commonCards"`
-	Events        json.RawMessage `json:"events"`
-	Raised        bool            `json:"raised"`
-	Voluntary     bool            `json:"voluntary"`
-	CountersKnown bool            `json:"countersKnown"`
+	ID               string          `json:"id"`
+	AgentID          uint32          `json:"agentId"`
+	UserID           uint32          `json:"userId"`
+	Currency         string          `json:"currency"`
+	RoomID           int64           `json:"roomId"`
+	RoomType         int             `json:"roomType"`
+	Inning           int64           `json:"inning"`
+	EndedAt          int64           `json:"endedAt"`
+	Net              int64           `json:"net"`
+	EffectiveBet     int64           `json:"effectiveBet"`
+	PlayMode         int             `json:"playMode"`
+	Players          json.RawMessage `json:"players"`
+	CommonCards      json.RawMessage `json:"commonCards"`
+	Events           json.RawMessage `json:"events"`
+	Raised           bool            `json:"raised"`
+	Voluntary        bool            `json:"voluntary"`
+	CountersKnown    bool            `json:"countersKnown"`
+	BehaviorVersion  int             `json:"behaviorVersion,omitempty"`
+	BlackjackActions *struct {
+		ManualBet    bool `json:"manualBet"`
+		Doubled      bool `json:"doubled"`
+		Split        bool `json:"split"`
+		InsuranceBuy bool `json:"insuranceBuy"`
+	} `json:"blackjackActions,omitempty"`
+	SeatChoices *struct {
+		BetOpportunity  bool `json:"betOpportunity"`
+		ManualBet       bool `json:"manualBet"`
+		AboveMinimumBet bool `json:"aboveMinimumBet"`
+		ManualGrab      bool `json:"manualGrab"`
+		PositiveGrab    bool `json:"positiveGrab"`
+	} `json:"seatChoices,omitempty"`
+	ArrangementChoices *struct {
+		ClientSubmitted bool `json:"clientSubmitted"`
+		Extended        bool `json:"extended"`
+	} `json:"arrangementChoices,omitempty"`
+	MahjongDiscards *struct {
+		ClientDiscard bool `json:"clientDiscard"`
+		ServerDiscard bool `json:"serverDiscard"`
+	} `json:"mahjongDiscards,omitempty"`
 }
 type playerPanelInput struct {
 	Page     int    `json:"page"`
@@ -43,6 +66,7 @@ type playerPanelInput struct {
 	TargetID uint32 `json:"targetId"`
 	Currency string `json:"currency"`
 	RoomID   int64  `json:"roomId"`
+	RoomType int    `json:"roomType"`
 	PropID   int    `json:"propId"`
 	Patch    struct {
 		Name    *string `json:"remarkName"`
@@ -163,6 +187,9 @@ func (dd *DBDao) gogamePlayerPanel(ctx context.Context, operation, payload strin
 		}
 		return panelNote(row), nil
 	case "playerPanelRecords":
+		if in.RoomType != 0 && in.RoomType != 19 {
+			return nil, status.Error(codes.InvalidArgument, "non-holdem details use settlement history")
+		}
 		if in.TargetID == 0 || in.TargetID >= 90000000 || in.RoomID <= 0 || in.Page < 1 || in.Size < 1 || in.Size > 100 || (in.Page-1)*in.Size >= 10000 {
 			return nil, status.Error(codes.InvalidArgument, "invalid player records query")
 		}
@@ -170,7 +197,7 @@ func (dd *DBDao) gogamePlayerPanel(ctx context.Context, operation, payload strin
 			return nil, err
 		}
 		var totals struct{ Total, Score int64 }
-		where := "agent_id=? AND player_id=? AND currency=? AND ended_at>=? AND ended_at<=?"
+		where := "room_type=19 AND agent_id=? AND player_id=? AND currency=? AND ended_at>=? AND ended_at<=?"
 		if err := dd.db.WithContext(ctx).Raw("SELECT COUNT(*) AS total,COALESCE(SUM(net),0) AS score FROM gg_player_panel_hand WHERE "+where, in.AgentID, in.TargetID, in.Currency, seven.UnixMilli(), now.UnixMilli()).Scan(&totals).Error; err != nil {
 			return nil, err
 		}
@@ -190,13 +217,16 @@ func (dd *DBDao) gogamePlayerPanel(ctx context.Context, operation, payload strin
 		if err := dd.centerIdentity(ctx, in.TargetID, in.AgentID, in.Currency); err != nil {
 			return nil, err
 		}
+		if in.RoomType != 0 && in.RoomType != 19 {
+			return dd.nonHoldemPanelTotals(ctx, in, now.UnixMilli())
+		}
 		var stats struct{ TotalHands, Known, Raised, Voluntary, TableHands, TableVoluntary, TodayScore, WeekScore, SevenHands int64 }
-		sql := "SELECT COUNT(*) AS total_hands,COALESCE(SUM(counters_known),0) AS known,COALESCE(SUM(raised),0) AS raised,COALESCE(SUM(voluntary),0) AS voluntary,COALESCE(SUM(room_id=?),0) AS table_hands,COALESCE(SUM(CASE WHEN room_id=? THEN voluntary ELSE 0 END),0) AS table_voluntary,COALESCE(SUM(CASE WHEN ended_at>=? THEN net ELSE 0 END),0) AS today_score,COALESCE(SUM(CASE WHEN ended_at>=? THEN net ELSE 0 END),0) AS week_score,COALESCE(SUM(ended_at>=?),0) AS seven_hands FROM gg_player_panel_hand WHERE agent_id=? AND player_id=? AND currency=?"
+		sql := "SELECT COUNT(*) AS total_hands,COALESCE(SUM(counters_known),0) AS known,COALESCE(SUM(raised),0) AS raised,COALESCE(SUM(voluntary),0) AS voluntary,COALESCE(SUM(room_id=?),0) AS table_hands,COALESCE(SUM(CASE WHEN room_id=? THEN voluntary ELSE 0 END),0) AS table_voluntary,COALESCE(SUM(CASE WHEN ended_at>=? THEN net ELSE 0 END),0) AS today_score,COALESCE(SUM(CASE WHEN ended_at>=? THEN net ELSE 0 END),0) AS week_score,COALESCE(SUM(ended_at>=?),0) AS seven_hands FROM gg_player_panel_hand WHERE room_type=19 AND agent_id=? AND player_id=? AND currency=?"
 		if err := dd.db.WithContext(ctx).Raw(sql, in.RoomID, in.RoomID, today.UnixMilli(), week.UnixMilli(), seven.UnixMilli(), in.AgentID, in.TargetID, in.Currency).Scan(&stats).Error; err != nil {
 			return nil, err
 		}
 		var rows []gogame.PlayerPanelHand
-		if err := dd.db.WithContext(ctx).Where("agent_id=? AND player_id=? AND currency=? AND ended_at>=?", in.AgentID, in.TargetID, in.Currency, seven.UnixMilli()).Order("ended_at DESC, record_key DESC").Limit(10000).Find(&rows).Error; err != nil {
+		if err := dd.db.WithContext(ctx).Where("room_type=19 AND agent_id=? AND player_id=? AND currency=? AND ended_at>=?", in.AgentID, in.TargetID, in.Currency, seven.UnixMilli()).Order("ended_at DESC, record_key DESC").Limit(10000).Find(&rows).Error; err != nil {
 			return nil, err
 		}
 		records := make([]json.RawMessage, 0, len(rows))
@@ -221,6 +251,12 @@ func (dd *DBDao) writePlayerPanel(ctx context.Context, records []playerPanelReco
 	rows := make([]gogame.PlayerPanelHand, 0, len(records))
 	verified := make(map[string]bool)
 	for _, r := range records {
+		if r.RoomType == 0 {
+			r.RoomType = 19 // Existing deployed reporters only sent Holdem hands.
+		}
+		if !panelSeatRoomType(r.RoomType) {
+			return nil, status.Error(codes.InvalidArgument, "invalid player hand game")
+		}
 		if r.UserID == 0 || r.UserID >= 90000000 || r.ID == "" || len(r.ID) > 256 || r.RoomID <= 0 || r.Inning <= 0 || r.EndedAt <= 0 || !cashCurrency.MatchString(r.Currency) || r.Net > cashMax || r.Net < -cashMax || r.EffectiveBet < 0 || r.EffectiveBet > cashMax {
 			return nil, status.Error(codes.InvalidArgument, "invalid settled player hand")
 		}
@@ -231,15 +267,69 @@ func (dd *DBDao) writePlayerPanel(ctx context.Context, records []playerPanelReco
 			}
 			verified[scope] = true
 		}
-		var players []map[string]any
-		if err := json.Unmarshal(r.Players, &players); err != nil || len(players) == 0 {
-			return nil, status.Error(codes.InvalidArgument, "player hand participants required")
+		if r.RoomType == 19 {
+			var players []map[string]any
+			if err := json.Unmarshal(r.Players, &players); err != nil || len(players) == 0 {
+				return nil, status.Error(codes.InvalidArgument, "player hand participants required")
+			}
+		} else {
+			// Other games keep only statistical facts here. Their original
+			// cards, participants and actions remain in settlement.log.
+			r.Players = json.RawMessage(`[]`)
+			r.CommonCards, r.Events = nil, nil
+			if r.RoomType != 26 && r.RoomType != 28 && r.RoomType != 30 || r.BehaviorVersion != 5 {
+				r.MahjongDiscards = nil
+			}
+			if r.RoomType == 25 && r.BehaviorVersion == 1 {
+				if !r.CountersKnown || r.Raised && !r.Voluntary {
+					return nil, status.Error(codes.InvalidArgument, "invalid saved ZJH behavior facts")
+				}
+				r.BlackjackActions = nil
+				r.SeatChoices = nil
+				r.ArrangementChoices = nil
+			} else if r.RoomType == 31 && r.BehaviorVersion == 2 {
+				if !r.CountersKnown || r.Raised || r.BlackjackActions == nil || r.Voluntary != r.BlackjackActions.ManualBet {
+					return nil, status.Error(codes.InvalidArgument, "invalid saved blackjack behavior facts")
+				}
+				r.SeatChoices = nil
+				r.ArrangementChoices = nil
+			} else if (r.RoomType == 24 || r.RoomType == 32) && r.BehaviorVersion == 3 {
+				facts := r.SeatChoices
+				if !r.CountersKnown || r.Raised || facts == nil || r.Voluntary != facts.ManualBet || facts.ManualBet && !facts.BetOpportunity || facts.AboveMinimumBet && !facts.ManualBet || facts.PositiveGrab && !facts.ManualGrab || r.RoomType == 32 && (!facts.BetOpportunity || facts.ManualGrab || facts.PositiveGrab) {
+					return nil, status.Error(codes.InvalidArgument, "invalid saved seat choice facts")
+				}
+				r.BlackjackActions = nil
+				r.ArrangementChoices = nil
+			} else if r.RoomType == 27 && r.BehaviorVersion == 4 {
+				if !r.CountersKnown || r.Raised || r.Voluntary || r.ArrangementChoices == nil {
+					return nil, status.Error(codes.InvalidArgument, "invalid saved arrangement choice facts")
+				}
+				r.BlackjackActions = nil
+				r.SeatChoices = nil
+			} else if (r.RoomType == 26 || r.RoomType == 28 || r.RoomType == 30) && r.BehaviorVersion == 5 {
+				if !r.CountersKnown || r.Raised || r.Voluntary || r.MahjongDiscards == nil {
+					return nil, status.Error(codes.InvalidArgument, "invalid saved mahjong discard facts")
+				}
+				r.BlackjackActions = nil
+				r.SeatChoices = nil
+				r.ArrangementChoices = nil
+			} else {
+				r.Raised, r.Voluntary, r.CountersKnown = false, false, false
+				r.BehaviorVersion = 0
+				r.BlackjackActions = nil
+				r.SeatChoices = nil
+				r.ArrangementChoices = nil
+			}
 		}
 		raw, err := json.Marshal(r)
 		if err != nil {
 			return nil, err
 		}
-		rows = append(rows, gogame.PlayerPanelHand{RecordKey: fmt.Sprintf("%x", sha256.Sum256([]byte(scope+":"+r.ID))), AgentId: r.AgentID, PlayerId: r.UserID, Currency: r.Currency,
+		identity := scope + ":" + r.ID
+		if r.RoomType != 19 {
+			identity = fmt.Sprintf("%s:%d:%s", scope, r.RoomType, r.ID)
+		}
+		rows = append(rows, gogame.PlayerPanelHand{RecordKey: fmt.Sprintf("%x", sha256.Sum256([]byte(identity))), AgentId: r.AgentID, PlayerId: r.UserID, Currency: r.Currency, RoomType: r.RoomType,
 			RoomId: r.RoomID, EndedAt: r.EndedAt, Net: r.Net, Raised: r.Raised, Voluntary: r.Voluntary, CountersKnown: r.CountersKnown, Payload: string(raw)})
 	}
 	err := dd.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error { return tx.Clauses(clause.OnConflict{DoNothing: true}).Create(&rows).Error })

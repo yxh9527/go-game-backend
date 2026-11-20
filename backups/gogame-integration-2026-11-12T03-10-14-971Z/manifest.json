@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/unified/pool_log_index_test.go",
+      "before": null,
+      "after": "3ab5e8bc8bc5c6940c7bd93389c84ef8accf48554ec113f9f0f6444ca624fb3c"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "e8ac4c12bde68ebdba3e50d10edca037a8739e1f39fb9d7a5dce88ff6c0359b8",
+      "after": "51199704405dc01c7c6e6d594e52198f55e48f5634e4641861ae36cf843d6786"
+    }
+  ]
+}

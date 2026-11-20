@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/unified/normal_settlement_bills_test.go",
+      "before": "46b7e0a9e3a15d6a78335dd8005d7de4bdfafc7565f841eae5ef1862c081b252",
+      "after": "a80650e9fc81bc89ce4c39cd2b569eedb20b111a2459e48f2fcb182016f59267"
+    },
+    {
+      "path": "lottery/unified/scratch_display_report_test.go",
+      "before": "0c36828006b906566f87c98beda06c7931e16822c99363a99f83eb365d394471",
+      "after": "69d3239af92e71b6c81e0f2c10edfdb15205ccc8badcca1deafb55e37d81e36d"
+    },
+    {
+      "path": "lottery/unified/settlement_bills_test.go",
+      "before": "ef0feda76ba2f91545dbcf08a3f81b9d7675d2c92c4cc0dc2752eca6deedd333",
+      "after": "1d003587b8ffa9dcbccf6cac131c41dea49851b112fb639e0ddaa48a4d258cd0"
+    },
+    {
+      "path": "lottery/unified/settlement_report_sql_test.go",
+      "before": null,
+      "after": "acc566c57ce0070423dc8955d3ef8e5ef4e2afed6ffb5e68136c42071110767c"
+    },
+    {
+      "path": "lottery/unified/settlement_reports_test.go",
+      "before": "6821df30a42c0f9724af1ff7d1abced7a3adb30107bf0539859b4cbc27cca409",
+      "after": "e518459265cf1b296768aaf285762b8910b463af090952e1d53d90a8ba9659a4"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "ba3b813d165f469cf1b3532a35813ef5ce435a6b299549315bf9e3bfc7845f6f",
+      "after": "558a5ef30fbb031e3aa885da6a0412a8f66815a12a6f9e03fd0863979bb4402b"
+    }
+  ]
+}

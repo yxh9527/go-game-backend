@@ -30,12 +30,14 @@ func GameList(ctx *gin.Context) {
 	gis := make([]*entity.GameListItem, 0)
 	for _, game := range games {
 		gi := &entity.GameListItem{
-			Id:       int(game.Id),
-			Number:   game.Number,
-			GameType: game.GameType,
-			Name:     game.Name,
-			NameZH:   game.NameZH,
-			Symbol:   game.ConfName,
+			Id:             int(game.Id),
+			Number:         game.Number,
+			GameType:       game.GameType,
+			ClientGameType: game.ClientGameType,
+			RoomType:       game.RoomType,
+			Name:           game.Name,
+			NameZH:         game.NameZH,
+			Symbol:         game.ConfName,
 		}
 		gis = append(gis, gi)
 	}

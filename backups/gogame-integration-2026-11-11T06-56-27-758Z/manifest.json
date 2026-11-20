@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "data-center/dao/gogame_payments_test.go",
+      "before": "11c11c38c3402bfc35e37bcfc361f45e9da2fe170a3bc3090801dec28b649c73",
+      "after": "7429e87843cbfc94e5d3c88bc97c50a8729c525429fcb596279633ef048e95e9"
+    },
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": "c71aef4842e898a43a62f8fd4a73d1419989e138fa6f6e0c4e6c042973bb030c",
+      "after": "7932f0a81b1a4a56dada24d7258ed1613f4c223f890141f2c15dbec5097f263c"
+    },
+    {
+      "path": "data-center/dao/gogame_reentry_history_test.go",
+      "before": null,
+      "after": "d73b62cd2c45bc69942d43a2e2f09095a7dafa4a8e4abbe9502b2774f838954a"
+    },
+    {
+      "path": "data-center/dao/user_center_matches.go",
+      "before": "6f5b43beff994ef79466b71233fa33c0ccb1c56c4a85b9aa6e479737e0c49d6a",
+      "after": "db0f866b7772e1bb1e2cabea1ad91751b535d50cf11e87f3d834cde8d363b021"
+    }
+  ]
+}

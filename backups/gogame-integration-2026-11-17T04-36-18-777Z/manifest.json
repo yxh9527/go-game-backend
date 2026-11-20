@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/player_panel_totals_test.go",
+      "before": "eb3c298f0c3af8bb6387908823ff703bc72ba101c7608ee736f1e2b5ad93695b",
+      "after": "6233ae6473ff5319573f7fc1123d61a4cc695e5c720cedb1f8ee62eda1db0930"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals.go",
+      "before": "6113fcf46f86d789b8172e21d8c6c1f054c612dbf483f41057fa91be95ccca2b",
+      "after": "ceba903352e6133ff455c8d91b6bfc0e9a299d0bddfe68a943089c67f3d20525"
+    },
+    {
+      "path": "data-center/dao/player_panel_zjh_actions_test.go",
+      "before": null,
+      "after": "43ebffe06ee79f550dc8d70e75fdd4ea82810fabd1fd0c44984ff7163fed624e"
+    },
+    {
+      "path": "data-center/dao/player_panel.go",
+      "before": "4474e182f0ddd785d68a78a95451eeb6a823f896889eac70aeb729d35d3b6567",
+      "after": "ff93047452a49b9992dc1ef7c1da85b44b5bca82f54b62bfaf9684bbeb8afc76"
+    }
+  ]
+}

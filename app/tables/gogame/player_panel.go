@@ -3,11 +3,12 @@ package gogame
 // PlayerPanelHand is immutable settled-hand reporting data, never a wallet ledger.
 type PlayerPanelHand struct {
 	RecordKey     string `gorm:"column:record_key;size:64;primaryKey"`
-	AgentId       uint32 `gorm:"column:agent_id;index:idx_panel_account,priority:1"`
-	PlayerId      uint32 `gorm:"column:player_id;index:idx_panel_account,priority:2"`
-	Currency      string `gorm:"column:currency;size:12;index:idx_panel_account,priority:3"`
+	AgentId       uint32 `gorm:"column:agent_id;index:idx_panel_account,priority:1;index:idx_panel_game_account,priority:1"`
+	PlayerId      uint32 `gorm:"column:player_id;index:idx_panel_account,priority:2;index:idx_panel_game_account,priority:2"`
+	Currency      string `gorm:"column:currency;size:12;index:idx_panel_account,priority:3;index:idx_panel_game_account,priority:3"`
+	RoomType      int    `gorm:"column:room_type;not null;default:19;index:idx_panel_game_account,priority:4"`
 	RoomId        int64  `gorm:"column:room_id;index"`
-	EndedAt       int64  `gorm:"column:ended_at;index:idx_panel_account,priority:4"`
+	EndedAt       int64  `gorm:"column:ended_at;index:idx_panel_account,priority:4;index:idx_panel_game_account,priority:5"`
 	Net           int64  `gorm:"column:net"`
 	Raised        bool   `gorm:"column:raised"`
 	Voluntary     bool   `gorm:"column:voluntary"`

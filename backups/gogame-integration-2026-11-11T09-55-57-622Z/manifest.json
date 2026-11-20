@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "lottery/dao/finance_seat_net.go",
+      "before": "1c88df30fed9ae725ac545cc3c9151882b881ccb4c949d1817e2ed07e6f100e0",
+      "after": "d34be9378a7ff150fcf91ca9c0027ffd791f9a2f4fb0410bd289c818d5f441d6"
+    },
+    {
+      "path": "lottery/unified/banker_net_test.go",
+      "before": null,
+      "after": "cbe4c257209d8dbd560ead6253793f0dd4830797a478da9f0cd594800147e3f0"
+    },
+    {
+      "path": "lottery/unified/banker_net.go",
+      "before": null,
+      "after": "34a114f8924d65fdd65be5ae89f5d59de7ae7e513cc29970dc657df406232083"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "e206b6484b80a7f5c59407a4ae1ef02f3a8b0b62fe9c1051ac9dfbdbbb1d960a",
+      "after": "46fffcf2e27768efad75aa6dd070d475e14db93cc7a68318af681f975b0a7d7f"
+    }
+  ]
+}

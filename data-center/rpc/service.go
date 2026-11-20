@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"app/batchwriter"
 	"app/entity"
 	"context"
 	"data-center/dao"
@@ -37,41 +38,9 @@ func NewDataCenterService(db, mdb *gorm.DB, es *elastic.Client) *DataCenterServi
 
 // 注单入库
 func (dc *DataCenterService) syncRecords() {
-	go func() {
-		defer func() {
-			if e := recover(); e != nil {
-				zap.L().Error("syncRecords,数据落地协程panic", zap.Any("recover", e))
-			}
-		}()
-		data := make([]*entity.CacheRecordsReq, 0, 16)
-		//十秒写一次
-		t := time.NewTicker(10 * time.Second)
-		for {
-			select {
-			case <-t.C:
-				if len(data) > 0 {
-					dc.es.BulkRecordsSave(data)
-					ids := make([]string, 0, 64)
-					for _, v := range data {
-						ids = append(ids, v.RoundID)
-					}
-					zap.L().Debug("批量写入注单信息", zap.Any("roundIds", ids))
-					data = make([]*entity.CacheRecordsReq, 0, 16)
-				}
-			case req := <-dc.RecordChan:
-				data = append(data, req)
-				if len(data) >= 8 {
-					dc.es.BulkRecordsSave(data)
-					ids := make([]string, 0, 64)
-					for _, v := range data {
-						ids = append(ids, v.RoundID)
-					}
-					zap.L().Debug("批量写入注单信息", zap.Any("roundIds", ids))
-					data = make([]*entity.CacheRecordsReq, 0, 16)
-				}
-			}
-		}
-	}()
+	go batchwriter.Run(context.Background(), dc.RecordChan, 8, 10*time.Second, dc.es.BulkRecordsSave, func(err error, count int) {
+		zap.L().Error("ES record batch pending retry", zap.Error(err), zap.Int("count", count), zap.Int("queued", len(dc.RecordChan)))
+	})
 }
 
 func (d *DataCenterService) GetPlayer(ctx context.Context, req *services.GetPlayerReq) (resp *services.GetPlayerResp, err error) {

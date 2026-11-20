@@ -74,6 +74,9 @@ func InitMysqlDb(m, p *gorm.DB) {
 	if !m.Migrator().HasTable(&manager.Game{}) {
 		m.AutoMigrate(&manager.Game{})
 	}
+	if err := gogame.MigrateGameRoutes(m); err != nil {
+		panic(err)
+	}
 	{
 		var gameCount int64
 		m.Model(&manager.Game{}).Count(&gameCount)
@@ -197,5 +200,6 @@ func InitMysqlDb(m, p *gorm.DB) {
 
 	m.AutoMigrate(gogame.ManagerModels()...)
 	p.AutoMigrate(gogame.PlayerModels()...)
+	p.AutoMigrate(&gogame.ScratchTicketStorage{})
 	gogame.SeedIfEmpty(m, p)
 }

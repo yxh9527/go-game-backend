@@ -1,4 +1,4 @@
-﻿package dao
+package dao
 
 import (
 	"app/entity"
@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"micro_service/services"
 	"strconv"
+	"time"
 
 	"github.com/olivere/elastic/v7"
-	"go.uber.org/zap"
 )
 
 type ESDao struct {
@@ -23,31 +23,57 @@ func NewESDao(client *elastic.Client) *ESDao {
 }
 
 func (esDao *ESDao) BulkRecordsSave(data []*entity.CacheRecordsReq) error {
-	bulkService := esDao.es.Bulk()
-	records := make([]elastic.BulkableRequest, 0)
+	if len(data) == 0 {
+		return nil
+	}
+	bulk := esDao.es.Bulk()
 	for _, req := range data {
-		hashStr := fmt.Sprintf("%d|%d|%s", req.AgentId, req.UserId, req.RoundID)
-		req.Hash = fmt.Sprintf("%x", md5.Sum([]byte(hashStr)))
-		records = append(records, elastic.NewBulkIndexRequest().Index(esindex.Settlement()).Id(req.Hash).Doc(req))
+		if req == nil || req.RoundID == "" {
+			return fmt.Errorf("record identity missing")
+		}
+		req.Hash = fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%d|%d|%s", req.AgentId, req.UserId, req.RoundID))))
+		bulk.Add(elastic.NewBulkIndexRequest().Index(esindex.Settlement()).Id(req.Hash).Doc(req))
 	}
-	bulkService.Add(records...)
-	_, err := bulkService.Do(context.Background())
-	if err != nil {
-		zap.L().Error("BulkRecordsSave,批量插入数据失败", zap.Any("err", err), zap.Any("data", data))
-	}
-	return nil
+	return saveCheckedBulk(bulk, len(data))
 }
 
 func (esDao *ESDao) BulkBillsSave(data []*entity.CacheBillsReq) error {
-	bulkService := esDao.es.Bulk()
-	records := make([]elastic.BulkableRequest, 0)
-	for _, req := range data {
-		records = append(records, elastic.NewBulkIndexRequest().Index(esindex.FlowingWater()).Doc(req))
+	if len(data) == 0 {
+		return nil
 	}
-	bulkService.Add(records...)
-	_, err := bulkService.Do(context.Background())
+	bulk := esDao.es.Bulk()
+	for _, req := range data {
+		if req == nil || req.FlowingWaterOn == "" {
+			return fmt.Errorf("bill identity missing")
+		}
+		id := fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%d|%d|%s", req.AgentId, req.UserId, req.FlowingWaterOn))))
+		bulk.Add(elastic.NewBulkIndexRequest().Index(esindex.FlowingWater()).Id(id).Doc(req))
+	}
+	return saveCheckedBulk(bulk, len(data))
+}
+
+func saveCheckedBulk(bulk *elastic.BulkService, count int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	response, err := bulk.Do(ctx)
 	if err != nil {
-		zap.L().Error("BulkBillsSave,批量插入数据失败", zap.Any("err", err), zap.Any("data", data))
+		return err
+	}
+	if response == nil || len(response.Items) != count {
+		return fmt.Errorf("incomplete ES bulk response")
+	}
+	for _, item := range response.Items {
+		if len(item) != 1 {
+			return fmt.Errorf("invalid ES bulk item")
+		}
+		for _, result := range item {
+			if result == nil || result.Error != nil || result.Status < 200 || result.Status >= 300 {
+				return fmt.Errorf("ES bulk item failed; retaining batch")
+			}
+		}
+	}
+	if response.Errors {
+		return fmt.Errorf("ES bulk errors; retaining batch")
 	}
 	return nil
 }

@@ -16,7 +16,8 @@ import parentView from '@/components/parent-view'
  * }
  */
 
-export default [{
+export default [
+{path:"/match-management-menu",name:"gogame-match-menu",component:Main,meta:{title:"比赛管理",icon:"md-trophy"},children:[{"path":"/match-management","name":"gogame-match","meta":{"title":"比赛管理","notCache":true,"icon":"md-trophy"},component:()=>import("@/view/gogame-match/MatchManagement.vue")}]},{
     path: '/login',
     name: 'login',
     meta: {

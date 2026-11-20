@@ -1,0 +1,41 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": "977514e99f1b6b12fcc432e42a7b491cf3c25c8e72f8e68b037ba4e44dd1b686",
+      "after": "c2f6ecc91c85b87a5cf8d9eb85a46b2aa1fedbc2138e93816d2fad5cbed35bb8"
+    },
+    {
+      "path": "data-center/dao/match_marker_retention_test.go",
+      "before": null,
+      "after": "37e097920bd447abc10ddd1282718d7bc36b8b6a220127b6565cdf02d8e757a4"
+    },
+    {
+      "path": "data-center/dao/match_marker_retention.go",
+      "before": null,
+      "after": "ead4e58920d187f0fb887b0369323803f2d3572a18da53a9ae7c806ea3ac7a0c"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_compaction_test.go",
+      "before": null,
+      "after": "533828db0553d93666ae7da9b34dd823f406dfc38c5c9d26ca5e09e17a4219da"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_compaction.go",
+      "before": null,
+      "after": "14f1c714a71a1561213cbace06271aba54d99349a47035858e26906c7256196e"
+    },
+    {
+      "path": "lottery/unified/scratch_receipt_compaction_test.go",
+      "before": null,
+      "after": "6a4e9f6b6f4e7a7bdddc2e2948a7eb6a2d55b7b8c15b3c73adc1ddcb30a065f2"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "6d3f97e90b673d46950052ee1e3b70c30e7ad948bd5695458e77ce6a155668a2",
+      "after": "e9e783461c4394831a5c4f25f0fcecca2182ec9c52578cbdae2e541f0ddb2409"
+    }
+  ]
+}

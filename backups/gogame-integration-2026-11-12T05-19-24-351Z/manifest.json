@@ -1,0 +1,31 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/user_center_reports_test.go",
+      "before": null,
+      "after": "211f426e17e9ade96ae52064dd22c25b915c6c5eb03bbe4a49e17f34fdec2727"
+    },
+    {
+      "path": "data-center/dao/user_center_reports.go",
+      "before": null,
+      "after": "132c672075b4febd94eaa0abeb971c07d794f58ad0edd53d8f1921315b805c11"
+    },
+    {
+      "path": "data-center/dao/user_center_test.go",
+      "before": "589a04622a0533122267f0cc5d725490ce4b54bf12a9a0c537343eeefbb610c2",
+      "after": "0431221d20f8bd42ef1cf22c93ccf9fdf47d97677b405c17969c802ba9d3fa93"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "268ef153ba624ae5e8084669936771daec9123f0b3dac1b33e35e02549bf2e89",
+      "after": "d2eaa7ea761964235af3e96ce43ba8a3c4198967e110d1353c5fe0ba348523b7"
+    },
+    {
+      "path": "data-center/rpc/service_gogame.go",
+      "before": "33a53e7b1697aac24d6b8093896422e668b2232294fbc0f30d026c0da5100991",
+      "after": "eb24383af3481ffe724b4417f7db0dfed90337d4e972d49d173d26d625aa3b8f"
+    }
+  ]
+}

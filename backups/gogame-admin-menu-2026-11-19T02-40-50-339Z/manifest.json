@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "kind": "gogame-admin-menu",
+  "files": [
+    {
+      "path": "NewAdminclient/src/router/routes.js",
+      "before": "98fd09a59e57675880068075de09deb42f6cd2c8a391e0d2eecfb5de51a799f9",
+      "after": "ad299b1f8889e750fd03530ca6f23b752a24ab583df6ca5d97862a0ce6563b29"
+    },
+    {
+      "path": "NewAdminclient/src/views/gogame-match/MatchManagement.vue",
+      "before": null,
+      "after": "a3288f761adea7bd07922153e89259baec894c40d77e87b03d6f3b35becdc702"
+    },
+    {
+      "path": "NewAdminclient/vue.config.js",
+      "before": "2845d470818c1ca257d7120fd206dafa00df38306b64c7eb7b1f093a249f6530",
+      "after": "7b6fedf005093bc2079495d4a1dc51c5cd2ec8a41be28e0b45bc7d2d0c8ea034"
+    },
+    {
+      "path": "adminagent/src/router/routers.js",
+      "before": "bad1f82366a18f52f4594ba14b794b69414990db5d35c0ec85aaa664a52d5bd4",
+      "after": "f1a37e08f4189ea0c44899d4ae290ebe31c208d1bffab4ea93fdc3d7194ee19c"
+    },
+    {
+      "path": "adminagent/src/view/gogame-match/MatchManagement.vue",
+      "before": null,
+      "after": "a3288f761adea7bd07922153e89259baec894c40d77e87b03d6f3b35becdc702"
+    },
+    {
+      "path": "adminagent/vue.config.js",
+      "before": "5f2a4bbc9402a098403f97b6fd03bb4f30fbd8383ca2a11a38286c61ebc46243",
+      "after": "afd708154ae595deca3e95492b00941eacb01f61d760bb30c55aad637a7d2ee3"
+    }
+  ]
+}

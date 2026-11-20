@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "fb60d42d4a1512530b8ad662cf3ab95f3dc3bd0c90cc08a3aaf71525778f6a08",
+      "after": "fbfd1caaa10dd232bae2e98da8a7c799f0510176cca39e0897660d29c47f5078"
+    },
+    {
+      "path": "data-center/dao/smart_task_control_test.go",
+      "before": null,
+      "after": "4581505300c96050eb2bbd6ae54f8427dd62e7e1938b8b344ed9f5775cec7bf6"
+    },
+    {
+      "path": "data-center/dao/smart_task_control.go",
+      "before": null,
+      "after": "3bc0f844de31a433214b33fb81416ad82df44176af76b67d61d5c91fb2cc40a3"
+    },
+    {
+      "path": "data-center/dao/smart_task.go",
+      "before": "7aee21cd7b72994650371fb2452114fed1fc41549cc554352693fc429933cfde",
+      "after": "1a586a0fa465f621d8a245d77f5aa71a99b47300287c2e0dd3e3e246f5e5b600"
+    }
+  ]
+}

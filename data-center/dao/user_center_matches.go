@@ -10,12 +10,13 @@ import (
 )
 
 type centerMatchEntry struct {
-	UserID  int64  `json:"userId"`
-	Name    string `json:"name"`
-	Avatar  string `json:"avatar"`
-	Status  string `json:"status"`
-	Rank    int64  `json:"rank"`
-	Receipt *struct {
+	UserID    int64              `json:"userId"`
+	Name      string             `json:"name"`
+	Avatar    string             `json:"avatar"`
+	Status    string             `json:"status"`
+	Rank      int64              `json:"rank"`
+	Reentries []centerMatchEntry `json:"reentries"`
+	Receipt   *struct {
 		PaidGold    int64 `json:"paidGold"`
 		PaidService int64 `json:"paidService"`
 	} `json:"receipt"`
@@ -112,6 +113,14 @@ func (dd *DBDao) centerMatches(ctx context.Context, q UserCenterQuery) (any, err
 		refund := int64(0)
 		if own.Refund != nil {
 			refund = own.Refund.Refunded
+		}
+		for _, request := range own.Reentries {
+			if request.Receipt != nil {
+				paid += request.Receipt.PaidGold + request.Receipt.PaidService
+			}
+			if request.Refund != nil {
+				refund += request.Refund.Refunded
+			}
 		}
 		total += rewards[int64(q.UserID)] - paid + refund
 		rank := own.Rank

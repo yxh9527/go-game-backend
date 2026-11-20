@@ -19,6 +19,8 @@ func ManagerModels() []any {
 		&MatchSchedule{},
 		&MatchOccurrence{},
 		&MatchRuntime{},
+		&FairProof{},
+		&SmartTask{},
 		&RoomConfig{},
 	}
 }

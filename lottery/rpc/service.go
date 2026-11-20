@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"app/batchwriter"
 	"app/config"
 	"app/entity"
 	"app/entity/view"
@@ -12,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"lottery/dao"
+	"lottery/unified"
 	"strconv"
 	"strings"
 	"sync"
@@ -40,6 +42,7 @@ type GameObject struct {
 }
 
 type LotteryService struct {
+	finance *unified.LotteryService
 	services.UnimplementedLotteryServiceServer
 	db  *dao.DBDao
 	rds *dao.RedisDao
@@ -85,11 +88,13 @@ func NewLotteryService(es *elastic.Client) *LotteryService {
 			record: make(map[string]decimal.Decimal),
 		},
 	}
+	tmp.finance = unified.NewLotteryService(es)
 	tmp.initRecordsCache()
 	tmp.producterPoolLog()
 	tmp.consumerPool()
 	tmp.consumerRecord()
 	tmp.consumerBill()
+
 	return tmp
 }
 
@@ -175,11 +180,10 @@ func (d *LotteryService) SaveBill(agentId, playerId uint32, bet, award decimal.D
 }
 
 func (d *LotteryService) SaveRecord(record *entity.CacheRecordsReq) *entity.CacheRecordsReq {
-	d.recordsCache.lock.Lock()
-	defer d.recordsCache.lock.Unlock()
-
 	hashStr := fmt.Sprintf("%d|%d|%s", record.AgentId, record.UserId, record.RoundID)
 	record.Hash = fmt.Sprintf("%x", md5.Sum([]byte(hashStr)))
+	d.recordsCache.lock.Lock()
+	defer d.recordsCache.lock.Unlock()
 	d.recordsCache.records[record.Hash] = &RecordItem{
 		TimeOut: time.Now().Unix() + 10,
 		record:  record,
@@ -202,19 +206,7 @@ func (d *LotteryService) initRecordsCache() {
 			ticker := time.NewTicker(5 * time.Second)
 			defer ticker.Stop()
 			for range ticker.C {
-				tmp := make([]*entity.CacheRecordsReq, 0, 512)
-				d.recordsCache.lock.Lock()
-				now := time.Now()
-				for key, item := range d.recordsCache.records {
-					tmp = append(tmp, item.record)
-					if now.Unix() > item.TimeOut || item.record.Complete {
-						delete(d.recordsCache.records, key)
-					}
-				}
-				d.recordsCache.lock.Unlock()
-				for _, item := range tmp {
-					d.RecordChan <- item
-				}
+				d.flushLegacyRecordCache(time.Now().Unix())
 			}
 		}()
 	}
@@ -294,65 +286,15 @@ func (d *LotteryService) producterPoolLog() {
 }
 
 func (d *LotteryService) consumerRecord() {
-	gw := &sync.WaitGroup{}
-	gw.Add(1)
-	go func() {
-		defer func() {
-			if e := recover(); e != nil {
-				zap.L().Error("syncSaveGameState,数据落地协程panic", zap.Any("recover", e))
-			}
-		}()
-		gw.Done()
-		data := make([]*entity.CacheRecordsReq, 0, 64)
-		t := time.NewTicker(10 * time.Second)
-		for {
-			select {
-			case <-t.C:
-				if len(data) > 0 {
-					d.es.BulkRecordsSave(data)
-					data = make([]*entity.CacheRecordsReq, 0, 64)
-				}
-			case req := <-d.RecordChan:
-				data = append(data, req)
-				if len(data) >= 40 {
-					d.es.BulkRecordsSave(data)
-					data = make([]*entity.CacheRecordsReq, 0, 64)
-				}
-			}
-		}
-	}()
-	gw.Wait()
+	go batchwriter.RunOnce(context.Background(), d.RecordChan, 40, 10*time.Second, d.es.BulkRecordsSave, func(err error, count int) {
+		zap.L().Error("final record ES batch failed; no retry", zap.Error(err), zap.Int("count", count), zap.Int("queued", len(d.RecordChan)))
+	})
 }
 
 func (d *LotteryService) consumerBill() {
-	gw := &sync.WaitGroup{}
-	gw.Add(1)
-	go func() {
-		defer func() {
-			if e := recover(); e != nil {
-				zap.L().Error("syncSaveGameState,数据落地协程panic", zap.Any("recover", e))
-			}
-		}()
-		gw.Done()
-		data := make([]*entity.CacheBillsReq, 0, 64)
-		t := time.NewTicker(10 * time.Second)
-		for {
-			select {
-			case <-t.C:
-				if len(data) > 0 {
-					d.es.BulkBillsSave(data)
-					data = make([]*entity.CacheBillsReq, 0, 64)
-				}
-			case req := <-d.BillChan:
-				data = append(data, req)
-				if len(data) >= 50 {
-					d.es.BulkBillsSave(data)
-					data = make([]*entity.CacheBillsReq, 0, 64)
-				}
-			}
-		}
-	}()
-	gw.Wait()
+	go batchwriter.RunOnce(context.Background(), d.BillChan, 50, 10*time.Second, d.es.BulkBillsSave, func(err error, count int) {
+		zap.L().Error("final bill ES batch failed; no retry", zap.Error(err), zap.Int("count", count), zap.Int("queued", len(d.BillChan)))
+	})
 }
 
 func (d *LotteryService) BulkPoolLog(data []*view.PoolLogItem) error {
@@ -391,6 +333,9 @@ func (d *LotteryService) SlotsBet(webId uint32, exchange decimal.Decimal, req *s
 	var newCurrency int64
 	award, _ := decimal.NewFromString(req.ProfitLoss)
 	bet, _ := decimal.NewFromString(req.Bet)
+	if bet.IsPositive() && !d.recordStorageAllowsWager() {
+		return 0, false, services.ErrorCode_SYSTEM_ERROR
+	}
 	exBet := bet.Mul(exchange)
 	exAward := award.Mul(exchange)
 	awardMax, _ := decimal.NewFromString(req.MaxProfitLoss)
@@ -726,6 +671,9 @@ func (d *LotteryService) rollbackPoolChange(agentId, userId uint32, symbol, curr
 func (d *LotteryService) deductBet(agentId, userId uint32, exchange decimal.Decimal, symbol, recordId, betStr, currencyType string) (decimal.Decimal, bool) {
 	var newCurrency int64 = 0
 	bet, _ := decimal.NewFromString(betStr)
+	if bet.IsPositive() && !d.recordStorageAllowsWager() {
+		return decimal.Zero, false
+	}
 	exBet := bet.Mul(exchange)
 	pc := config.CfgIns.GetPoolCfg(int64(agentId), symbol)
 	if pc == nil {
@@ -882,6 +830,9 @@ func (d *LotteryService) doSingleBet(req *singleBetReq) (resp *singleBetResp, er
 		resp.Code = services.ErrorCode_PARAMS_INVALID
 		return resp, nil
 	}
+	if bet.IsPositive() && !d.recordStorageAllowsWager() {
+		return resp, nil
+	}
 	balance, code := d.getPlayerCurrency(req.UserId)
 	if code != services.ErrorCode_OK {
 		resp.Code = code
@@ -982,6 +933,9 @@ func (d *LotteryService) doMultiBet(req *multiBetReq) (resp *multiBetResp, err e
 	bet, ok := parseAmountStrict(req.InitBet)
 	if !ok || bet.IsNegative() {
 		resp.Code = services.ErrorCode_PARAMS_INVALID
+		return resp, nil
+	}
+	if bet.IsPositive() && !d.recordStorageAllowsWager() {
 		return resp, nil
 	}
 	balance, code := d.getPlayerCurrency(req.UserId)

@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/shopspring/decimal"
 	"io"
 	"reflect"
 	"sort"
@@ -125,7 +126,15 @@ func gogameOne(ctx context.Context, db *gorm.DB, table string, id int64) (map[st
 	}
 	return rows[0], nil
 }
-func gogameInsert(ctx context.Context, db *gorm.DB, table string, values map[string]any) (map[string]any, error) {
+func gogameInsert(ctx context.Context, db *gorm.DB, table string, values map[string]any) (saved map[string]any, err error) {
+	err = gogameWithBlinds(ctx, db, table, values, func(tx *gorm.DB) error {
+		var e error
+		saved, e = gogameInsertRow(ctx, tx, table, values)
+		return e
+	})
+	return
+}
+func gogameInsertRow(ctx context.Context, db *gorm.DB, table string, values map[string]any) (map[string]any, error) {
 	if len(values) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "empty insert")
 	}
@@ -151,6 +160,9 @@ func gogameInsert(ctx context.Context, db *gorm.DB, table string, values map[str
 	return gogameOne(ctx, db, table, id)
 }
 func gogameUpdate(ctx context.Context, db *gorm.DB, table string, id int64, values map[string]any) error {
+	return gogameWithBlinds(ctx, db, table, values, func(tx *gorm.DB) error { return gogameUpdateRow(ctx, tx, table, id, values) })
+}
+func gogameUpdateRow(ctx context.Context, db *gorm.DB, table string, id int64, values map[string]any) error {
 	if len(values) == 0 {
 		return nil
 	}
@@ -187,10 +199,22 @@ func gogameNumber(value any) int64 {
 
 func (dd *DBDao) GogameCall(ctx context.Context, operation, payload string) (any, error) {
 	switch operation {
+	case "smartTaskSave", "smartTaskList", "smartTaskControl", "smartTaskReadMany", "smartTaskBegin", "smartTaskResolve":
+		return dd.gogameSmartTask(ctx, operation, payload)
+	case "fairProofWrite", "fairProofRead":
+		return dd.gogameFairProof(ctx, operation, payload)
+	case "issueTickets", "deleteTicket":
+		return dd.gogameTicketAdmin(ctx, operation, payload)
+	case "listFinanceGames":
+		return dd.gogameFinanceGames(ctx, payload)
 	case "playerPanelRead", "playerPanelRecords", "playerPanelWrite", "playerPanelNoteGet", "playerPanelNoteSet", "playerPanelQuota", "playerPanelGift":
 		return dd.gogamePlayerPanel(ctx, operation, payload)
 	case "cashRead", "cashApply":
 		return dd.gogameCash(ctx, operation, payload)
+	case "matchPayment":
+		return dd.gogameMatchPayment(ctx, payload)
+	case "tournamentTickets":
+		return dd.gogameTournamentTickets(ctx, payload)
 	}
 	var args GogameArgs
 	if err := DecodeGogameJSON(payload, &args); err != nil {
@@ -207,6 +231,24 @@ func (dd *DBDao) GogameCall(ctx context.Context, operation, payload string) (any
 	switch operation {
 	case "getMatch":
 		return gogameOne(ctx, dd.manager, "gg_match", args.ID)
+	case "readMatch":
+		rows, e := gogameRows(ctx, dd.manager, "SELECT m.*,r.payload AS runtime_payload FROM gg_match m LEFT JOIN gg_match_runtime r ON r.match_id=m.id WHERE m.id=?", args.ID)
+		if e != nil {
+			return nil, e
+		}
+		if len(rows) == 0 {
+			return nil, nil
+		}
+		state := map[string]any{"registrations": map[string]any{}, "outbox": []any{}}
+		if raw, ok := rows[0]["runtime_payload"].(string); ok && raw != "" {
+			if e = DecodeGogameJSON(raw, &state); e != nil {
+				return nil, e
+			}
+		}
+		delete(rows[0], "runtime_payload")
+		return map[string]any{"row": rows[0], "state": state}, nil
+	case "deleteMatch":
+		return dd.gogameDeleteDraft(ctx, args.ID)
 	case "getAward":
 		return gogameOne(ctx, dd.manager, "gg_award_template", args.ID)
 	case "listMatchPlayers", "listMatchRooms":
@@ -227,6 +269,8 @@ func (dd *DBDao) GogameCall(ctx context.Context, operation, payload string) (any
 		return dd.gogameSchedule(ctx, args)
 	case "ensureOccurrence":
 		return dd.gogameOccurrence(ctx, args)
+	case "deleteBlinds":
+		return dd.gogameDeleteBlinds(ctx, args.ID)
 	case "persistScore":
 		return nil, status.Error(codes.FailedPrecondition, "score snapshots are not an authoritative wallet operation; use existing financial service")
 	}
@@ -299,6 +343,29 @@ func (dd *DBDao) GogameCall(ctx context.Context, operation, payload string) (any
 		}
 		if operation == "updateMatch" && values["agent_id"] != nil && gogameNumber(values["agent_id"]) != gogameNumber(rows[0]["agent_id"]) {
 			return status.Error(codes.PermissionDenied, "match agent is immutable")
+		}
+		if operation == "updateTicket" {
+			before := rows[0]
+			if gogameNumber(before["num"]) > gogameNumber(before["remain"]) {
+				for _, key := range []string{"currency", "match_id"} {
+					if values[key] != nil && fmt.Sprint(values[key]) != fmt.Sprint(before[key]) {
+						return status.Error(codes.FailedPrecondition, "issued ticket value and scope are immutable")
+					}
+				}
+				if values["price"] != nil {
+					oldPrice, e1 := decimal.NewFromString(fmt.Sprint(before["price"]))
+					newPrice, e2 := decimal.NewFromString(fmt.Sprint(values["price"]))
+					if e1 != nil || e2 != nil || !oldPrice.Equal(newPrice) {
+						return status.Error(codes.FailedPrecondition, "issued ticket value is immutable")
+					}
+				}
+			}
+			next := gogameNumber(values["num"])
+			remaining := gogameNumber(before["remain"]) + next - gogameNumber(before["num"])
+			if next < 0 || remaining < 0 || remaining > next || values["remain"] != nil && gogameNumber(values["remain"]) != remaining {
+				return status.Error(codes.FailedPrecondition, "ticket inventory changed; reload before editing")
+			}
+			values["remain"] = remaining
 		}
 		if e = gogameUpdate(ctx, tx, entity.table, args.ID, values); e != nil {
 			return e
@@ -382,6 +449,10 @@ func (dd *DBDao) gogameOccurrence(ctx context.Context, args GogameArgs) (any, er
 }
 
 func (dd *DBDao) WithGogameMatch(ctx context.Context, id int64, work func(map[string]any, map[string]any) error) (bool, error) {
+	return dd.withGogameMatchSQL(ctx, id, func(_ *gorm.DB, row, state map[string]any) error { return work(row, state) })
+}
+
+func (dd *DBDao) withGogameMatchSQL(ctx context.Context, id int64, work func(*gorm.DB, map[string]any, map[string]any) error) (bool, error) {
 	if id <= 0 {
 		return false, status.Error(codes.InvalidArgument, "match id required")
 	}
@@ -412,7 +483,7 @@ func (dd *DBDao) WithGogameMatch(ctx context.Context, id int64, work func(map[st
 				return err
 			}
 		}
-		if err := work(row, state); err != nil {
+		if err := work(tx, row, state); err != nil {
 			return err
 		}
 		if gogameNumber(row["id"]) != id || gogameNumber(row["agent_id"]) != agent {

@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "data-center/dao/gogame_payments_test.go",
+      "before": "189403af7f00658c7fc44ed636518fffe5fc00619ce1cfd7051e87502d00971a",
+      "after": "11c11c38c3402bfc35e37bcfc361f45e9da2fe170a3bc3090801dec28b649c73"
+    },
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": "85c04b71a6c337cdb0326067a02260c1c6d20621b063347b06ef9e96ede3c1c2",
+      "after": "c71aef4842e898a43a62f8fd4a73d1419989e138fa6f6e0c4e6c042973bb030c"
+    }
+  ]
+}

@@ -9,6 +9,8 @@ type RecordLog struct {
 }
 
 type CacheRecordsReq struct {
+	Level uint32 `json:"level"`
+	ExPump float64 `json:"exPmup"`
 	WebId          uint32  `json:"webId"`
 	UserId         uint32  `json:"userId"`
 	AgentId        uint32  `json:"agentId"`

@@ -1,0 +1,136 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "app/config/unified_pool.go",
+      "before": null,
+      "after": "c1a3fe662c7e6b7f17fd15e0500666c2bcca2d146ed8d6795629fc2fdf7575ee"
+    },
+    {
+      "path": "app/entity/msg.go",
+      "before": "dfad159fef52f0bdbc14f8fe45607bbe490223a2d1462e3a389c27569ac1243e",
+      "after": "36706d56e650285c5232b2bc729e9313e82969840f09e87b4cddc695f8fac550"
+    },
+    {
+      "path": "app/entity/record.go",
+      "before": "1e48cd181989a69b8cb1a4f2fbc512d36e6148a273b20713d86c943afc0762a7",
+      "after": "d72f53b1117e0b672e0be2fa779bb0dc38578bbe5075c02180034ffc53c26307"
+    },
+    {
+      "path": "app/tables/dbInit.go",
+      "before": "9d0522140bb9b8b39a501045af1c269463489a53110a99ea578627a39e423eec",
+      "after": "9cba2b983160e038d4d4057f77a5379c94e267b31bd0daf609dfbeec28cabca4"
+    },
+    {
+      "path": "app/tables/gogame/game_route_test.go",
+      "before": null,
+      "after": "92651013a16d52b779010d85ff1f515815d7ea68c58ea39c59b41059bd6cbf8d"
+    },
+    {
+      "path": "app/tables/gogame/game_route.go",
+      "before": null,
+      "after": "6ec03c3989ae2cecfb1c03753aebc18e4382d8cc3c920fc503fb61f3addf81ad"
+    },
+    {
+      "path": "app/tables/manager/game.go",
+      "before": "c7131138c61866df076b81ca341e971dc19644ab9cf55ebbf5cd2f47bdd630e8",
+      "after": "153289fe8c237ce396bbbb4c488a09de80a2e0727bc3e10ee839e14c99e790f6"
+    },
+    {
+      "path": "data-center/dao/gogame_game_routes_test.go",
+      "before": null,
+      "after": "f65b9d4c6d5038d487f78ebdf24c10b27240f1a2e1254124ad3538445a6ead08"
+    },
+    {
+      "path": "data-center/dao/gogame_game_routes.go",
+      "before": null,
+      "after": "33223fb98ffa4801e631aa073afe5e9b7f6f08e6560cfbea80b8b87e01aebb17"
+    },
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "4258702b83b4fb874633a91e7cdb1d2411b59582e332175761ac40afb3b40084",
+      "after": "45a51758000fc7a1585ec2b5146b71a49168102882bf35f17291fbfbd3f18b58"
+    },
+    {
+      "path": "lottery/dao/reservation_ledger_test.go",
+      "before": null,
+      "after": "2a23def8e9e0a323ff588561344e7f3d8fc581d98a09b277b4a356d6ed6dc42f"
+    },
+    {
+      "path": "lottery/dao/unified_cache.go",
+      "before": null,
+      "after": "031795f8a49d343f567d86cef9792b280c0518bc1c38bb4dc3e4b8a84f0ab422"
+    },
+    {
+      "path": "lottery/dao/unified_redis.go",
+      "before": null,
+      "after": "23d07e99637296ce6816a99923a62cc3f5b667bc8270c1b64f5fa10071a574a4"
+    },
+    {
+      "path": "lottery/dao/unified_test_helpers_test.go",
+      "before": null,
+      "after": "4852d29dc411f156bf66ccc86f89288e526e77e76e848ff5ec0569b0c5053778"
+    },
+    {
+      "path": "lottery/rpc/service_unified.go",
+      "before": null,
+      "after": "003a688223b737276c58be044c3384bbb8cdb03cb0d459150416908cab665877"
+    },
+    {
+      "path": "lottery/rpc/service.go",
+      "before": "dc2af810b045e3c7d9da0144a740d1fd3a0d73ce1989006d5fcd5fd8b4d0ebc8",
+      "after": "b6158d0db431033247175a65f9301fd4164d9ca04715540d0c6d6c7ab76a0daf"
+    },
+    {
+      "path": "lottery/unified/pool_control_decision_test.go",
+      "before": null,
+      "after": "7a680672b524d64e3049301395eff0bd4a4f7c5c24698357d1d21561c08f5840"
+    },
+    {
+      "path": "lottery/unified/pool_control_decision.go",
+      "before": null,
+      "after": "b87c6b8eff6c0963bb09df09a6178582df8436db371d0215c1e6ca6013374bb4"
+    },
+    {
+      "path": "lottery/unified/service_test.go",
+      "before": null,
+      "after": "ef9cd5a0ede9bf8c79e87ac2d82b44a27534d5a4f647aad40e8f999c84f69732"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": null,
+      "after": "89df5af919175dbb00d87cfb10705b955ddbae6ab811c171591404669f0143b6"
+    },
+    {
+      "path": "micro_service/proto/base.proto",
+      "before": "ca76999dde1c02788cbcee886a5c48f3a20d90038d28914a5f689be69430f838",
+      "after": "bd722ec68a81408b7a9503f22f8e7a09b0a9c08ed8c4656344fef8b8f586b56f"
+    },
+    {
+      "path": "micro_service/proto/lottery.proto",
+      "before": "57379b5b0caa7591ef5db9d074fe25f18113449c635791d0baf69bbe9ba40f6c",
+      "after": "cca5d9f76f1843c21bb8150bba995db814074a7e262f3091d951d036a101df40"
+    },
+    {
+      "path": "micro_service/services/base.pb.go",
+      "before": "6b3ce62f2acb8acd4827c582e7790e85e69ebb272902674a3f09a6ca9b0664ce",
+      "after": "ae0cec7946df04f3c158be907e0fdcf62f70f5e5baf81007652e235ed7aaaae1"
+    },
+    {
+      "path": "micro_service/services/lottery_grpc.pb.go",
+      "before": "cf0edb422d873a2e01c47ecf54cd3daeaf1d75f1aa8060258fe4a4c2c92be1da",
+      "after": "0e756fa0a81e3f419d6bddd09b91529962520be219820fbfea0af13bb9f72e1d"
+    },
+    {
+      "path": "micro_service/services/lottery.pb.go",
+      "before": "cfb896b07272d171e0d22465e2dce7c7b1b659e7840e342771951d57ab2eca40",
+      "after": "9566b43230199ef920b7787f7531cd9028cae633b559ee0c62c714d996f11a4e"
+    },
+    {
+      "path": "web-api/controller/v2/game.go",
+      "before": "5da31ab345dd68c747a3ff87530037373d11258bb9c61f4a3e05440507021574",
+      "after": "00dd2d01d0c9996bb223023a618ebf70171499585a144d928ee27cb1c59f85d3"
+    }
+  ]
+}

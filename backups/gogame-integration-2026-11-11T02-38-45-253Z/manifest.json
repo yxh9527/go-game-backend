@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "app/tables/gogame/match.go",
+      "before": "adef94b8d3158226c3bcecd00fb92178e3d6cf275030c1d6c1b80d31a40dfd00",
+      "after": "b045bd72028cdb7e3033b6de07e6af39f1dcd0926857136b24d4866289134a1b"
+    },
+    {
+      "path": "data-center/dao/gogame_payments_test.go",
+      "before": null,
+      "after": "189403af7f00658c7fc44ed636518fffe5fc00619ce1cfd7051e87502d00971a"
+    },
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": null,
+      "after": "85c04b71a6c337cdb0326067a02260c1c6d20621b063347b06ef9e96ede3c1c2"
+    },
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "45a51758000fc7a1585ec2b5146b71a49168102882bf35f17291fbfbd3f18b58",
+      "after": "7bc4266e891e6197ec2fe7772386535798b709fe3bc4fa67e74434f89c5a9b13"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/final_record_backpressure_test.go",
+      "before": null,
+      "after": "bed6fcbe8a9aafe58ffbbcc651f04aaa5a1f2533892b78e903ab8a8389ed28f5"
+    },
+    {
+      "path": "lottery/dao/final_record_backpressure.go",
+      "before": null,
+      "after": "ed7e82eeb925bbe2c2071d9f3a893a595d346732329e8d5ac3afa39cccfbd1af"
+    },
+    {
+      "path": "lottery/dao/final_record_store.go",
+      "before": "351b447319c4f308b131db54b4c06504992831abcc8bff278b9cdd9f32a44327",
+      "after": "99747f9595c6871e9fc1b26f8143969109045417524376646eec59455d3895c2"
+    },
+    {
+      "path": "lottery/rpc/record_storage_admission_test.go",
+      "before": null,
+      "after": "88dd7323d0edd19e3ca80f36f045671549e9a1ef9097b42fde549effb012140a"
+    },
+    {
+      "path": "lottery/rpc/record_storage_admission.go",
+      "before": null,
+      "after": "6631e252988e6b629b68c73c3eb48a078c05485a328d459f3e5049cdbe8fd719"
+    },
+    {
+      "path": "lottery/rpc/service_ug5.go",
+      "before": "7b9fabddaac4eacee9cafd99384531c435524b2f100a72b057dc8decc64ab3a1",
+      "after": "22eaf0c5fb4f7ce181fd5df587a7da14084460904b97984701b22c7e9c51630c"
+    },
+    {
+      "path": "lottery/rpc/service.go",
+      "before": "5cac07e9d72e27c4bb4feb899870e9c217a10fd6558544896065084f6439d094",
+      "after": "9d87a055d87689fe4f69464f0009753e85c9dd0e4d63ad74d6643055852c9a93"
+    },
+    {
+      "path": "lottery/unified/record_storage_admission_test.go",
+      "before": null,
+      "after": "2b275bfcdadeaf0ba405cf0a9400d2847625f192649bf6ebf8a20a53c6656e6b"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "ebd12b977bebfb1c033b8859d39dd2273f1aa6b0d7b436d8de60de3f823b55ae",
+      "after": "c3942ae86b7c9e3f25123ab1847c5820799c5140baee9e7ba7ac3fd88b57d40f"
+    }
+  ]
+}

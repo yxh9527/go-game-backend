@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/smart_task_attempt_test.go",
+      "before": "0060f8c8af7b0fc14d080344fe5cdaef0770ff57d8ed1a6b44aa5e1e7e052401",
+      "after": "b95ecbf02c8942bfb61e831f7702a5151bfd759fda745be034c48ee61bdbd0e9"
+    },
+    {
+      "path": "data-center/dao/smart_task_attempt.go",
+      "before": "546ec05ebc795c4982a4d9edc6ff545f800780c030733be9c6dbdf195821492d",
+      "after": "60dfdf0a360f187881adc8c8d374dd110ef203f3b85c97be343e1a19d2678ec3"
+    },
+    {
+      "path": "data-center/dao/smart_task_refund_test.go",
+      "before": "c3f9c8c57665d390e46238b7fb1d0220535b7636b9d960122653dc00e9f5e2fa",
+      "after": "32f57fa78737f1ad66f77303e36c9722439762318820c4d0ca7e0773085ce4d0"
+    },
+    {
+      "path": "data-center/dao/smart_task_result_source_test.go",
+      "before": null,
+      "after": "d32c3177d7c1bfcca6f1afd8b0bcdfee261b383625d2331d5b49638e3e527f3c"
+    },
+    {
+      "path": "data-center/dao/smart_task_result_source.go",
+      "before": null,
+      "after": "6f3752c8bb72c2efdf62fc7471ce0aae25ee8013b6f5407c832b555e7cf4a61e"
+    },
+    {
+      "path": "data-center/dao/smart_task_zero_net_test.go",
+      "before": null,
+      "after": "d225976a88a9c24a42fa49558d18faf6409629928a706300dfcedd1ca2e674c0"
+    },
+    {
+      "path": "data-center/rpc/service_gogame.go",
+      "before": "8f1013f917a88e7441b70ea40f4be0729055aca0675de695681fe277a3bc1eee",
+      "after": "7a7a1d31747f9fb3e7c4628cf224bb3e1eb4a9857cb115e92f2aaccfb0bca2c2"
+    },
+    {
+      "path": "data-center/rpc/smart_task_result_test.go",
+      "before": null,
+      "after": "6be15fa587134f60e8b151cf321f80153e7ad4ebe84bb8e7e3ec57d98945068f"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "d383cda96b2394763434a6079e080a132cc7a3d05b3a51e5b8a6cc02800c5a54",
+      "after": "314263ec5547e62ea15fcf99cb9d9f9b6d19a8fc23bd11a1cbd8eefd1e587bb8"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "96205650bf17ecc8b06a47fda542c6554f896117c4a114e71b0788427af1049a",
+      "after": "75521c453d36e91381400f624247dab2c2fff01dfdea388eb4fb403b6d9f6a28"
+    },
+    {
+      "path": "lottery/unified/smart_task_settlement_proof_test.go",
+      "before": null,
+      "after": "45fbb4e251be8cb8e154eb22b7dacba82f4f5b9ab522a388506928d17096ccec"
+    },
+    {
+      "path": "lottery/unified/smart_task_settlement_proof.go",
+      "before": null,
+      "after": "0c1b3cbf02f0e1025db5050f9dc02059f8d95fac44666845816b84e0fc129f5b"
+    }
+  ]
+}

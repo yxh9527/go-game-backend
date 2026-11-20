@@ -1,0 +1,46 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/finance_report_snapshot_test.go",
+      "before": null,
+      "after": "8300e7aa274688c512f5ee34567010de949a922e8b86d257ca4bd2b9a8e12346"
+    },
+    {
+      "path": "lottery/dao/settled_display_reports_test.go",
+      "before": null,
+      "after": "37d80775e4c21b4e52a238d71a613e9b3ac7343e12a0d403b2879a124ffc56ba"
+    },
+    {
+      "path": "lottery/dao/settled_display_reports.go",
+      "before": null,
+      "after": "53fd94434d6405eae804f649ab8fb608a4d336042e421a23145882fe57805fce"
+    },
+    {
+      "path": "lottery/unified/banker_net.go",
+      "before": "34a114f8924d65fdd65be5ae89f5d59de7ae7e513cc29970dc657df406232083",
+      "after": "5d9985e9d1ee686e9ac736014dafd76ddbf33f8d4188d6cfe2d2c4b21575233a"
+    },
+    {
+      "path": "lottery/unified/seat_net.go",
+      "before": "487824a7b6fc64c3a58483fef9341f52baa0ca24056ba7a0d4b34e2640e30393",
+      "after": "ecb6b31ff39514386bad189904c9e877a93110d36baf9bead20c5fad03fc7af5"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "51199704405dc01c7c6e6d594e52198f55e48f5634e4641861ae36cf843d6786",
+      "after": "2cd12dc079aec463bde85612ec9a7f9748a21b7ccf7510a2b61ae5655fda0455"
+    },
+    {
+      "path": "lottery/unified/settlement_reports_test.go",
+      "before": null,
+      "after": "2c462dc90ed2330cd90be528d0ef8beb349b8e21112b5b7cb091039e4030c245"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": null,
+      "after": "01e6324365a4d3ab57431b0966be341369ece671c3b29b1592f7ef0035818889"
+    }
+  ]
+}

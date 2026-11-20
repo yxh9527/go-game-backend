@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/final_record_store_test.go",
+      "before": null,
+      "after": "078d10e30461485c7a0cdc3eada79e2968099634969476983a5267c7a8ab5db9"
+    },
+    {
+      "path": "lottery/dao/final_record_store.go",
+      "before": null,
+      "after": "351b447319c4f308b131db54b4c06504992831abcc8bff278b9cdd9f32a44327"
+    },
+    {
+      "path": "lottery/rpc/service.go",
+      "before": "a375f8a5ab1966066eca00b68a62d838ef3b98d0ea9815305defe72c84880419",
+      "after": "5cac07e9d72e27c4bb4feb899870e9c217a10fd6558544896065084f6439d094"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "2cd12dc079aec463bde85612ec9a7f9748a21b7ccf7510a2b61ae5655fda0455",
+      "after": "ebd12b977bebfb1c033b8859d39dd2273f1aa6b0d7b436d8de60de3f823b55ae"
+    }
+  ]
+}

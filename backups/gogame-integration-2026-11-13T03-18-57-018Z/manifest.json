@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/reservation_ledger_test.go",
+      "before": "2a23def8e9e0a323ff588561344e7f3d8fc581d98a09b277b4a356d6ed6dc42f",
+      "after": "0865fb137f65a7fa45dd0a69000aaacbdd522b12c0735488fb240fe5e1b03fec"
+    },
+    {
+      "path": "lottery/dao/reservation_retention_test.go",
+      "before": null,
+      "after": "ef3aa12cc34290666c5b85ce17453d015da51d804b652a5d8fe3de249969965f"
+    },
+    {
+      "path": "lottery/dao/reservation_retention.go",
+      "before": null,
+      "after": "c2a0391350c9c0f76a11a01f9e491c1107740e5d498deed531ee792aa2b6e9aa"
+    },
+    {
+      "path": "lottery/dao/unified_cache.go",
+      "before": "031795f8a49d343f567d86cef9792b280c0518bc1c38bb4dc3e4b8a84f0ab422",
+      "after": "0779d69118b44b8d9a2e7f473ef117d09974cc36eae456534e1b1ee10503caa3"
+    },
+    {
+      "path": "lottery/dao/unified_redis.go",
+      "before": "7af112e98dfbdbda31ac9b63741fee6d3874f95b8095ebe7aba3fe468acda0f3",
+      "after": "247d30ae644591ab9b71894a9fd29a51764f6e393ab03d0562a6d1a542db0200"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "35b28b4d1d3711803b59cbf7a002af1d7a790db6758b6bbb09b8edc30d41d03e",
+      "after": "d383cda96b2394763434a6079e080a132cc7a3d05b3a51e5b8a6cc02800c5a54"
+    }
+  ]
+}

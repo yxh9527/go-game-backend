@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/scratch_history.go",
+      "before": "20636dcb9fa246d25633e9323ebd50861b64c8b26d20154d088453f22aeecb5e",
+      "after": "57e75ed8234f63ea7bb434e200348b3e916b0900784fc86b990274caca068a37"
+    },
+    {
+      "path": "data-center/dao/scratch_settlement_history_test.go",
+      "before": "51e701b3f140f1f55e8de86cafbe9b72c304a9acf41f4d0d244d5932808bf3de",
+      "after": "5fe42fac263215f449f51fcd992714ee6b3844a52ecf4e49483b39744629ed7e"
+    },
+    {
+      "path": "data-center/dao/settlement_history_test.go",
+      "before": "7820a8a0be67789545e068d45d7bf5559eb7e0612339bf63841f7b2bceb7d9d5",
+      "after": "dd45cd009e4f7eca742a34785dec329fe80109f74bbff670f2d665986055d487"
+    },
+    {
+      "path": "data-center/dao/settlement_history.go",
+      "before": "274b46dbc418340d3df8f587198ca0de3ad217de7a115334ab204a039285b8dc",
+      "after": "3eab05a93e56b4791c1cf80156fcfaffcef0bc26291a975f591de67685a7580e"
+    },
+    {
+      "path": "data-center/dao/settlement_scan_test.go",
+      "before": null,
+      "after": "93a7348f03f9632af9149d50c188768455a8de5699bf625619dfc6b8c231de60"
+    },
+    {
+      "path": "data-center/dao/settlement_scan.go",
+      "before": null,
+      "after": "f7bd88cda539882314030797d0a6084065d31971978202a25049833347328e37"
+    }
+  ]
+}

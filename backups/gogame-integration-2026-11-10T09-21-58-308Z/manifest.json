@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "lottery/dao/finance_bet.go",
+      "before": "3fbd2cdb825761c8f9a1ba6920ebee83852bcaf6c81077afb648e2a94080395e",
+      "after": "34c5e7ec37c601e463d25e46285ce85cfeadad61e1e6d01f9167e37b528334fe"
+    },
+    {
+      "path": "lottery/dao/finance_carry_test.go",
+      "before": null,
+      "after": "a208743e7b079384bb84a341d7b8466b6d2e8c0a2be9197e60eb379d51148341"
+    },
+    {
+      "path": "lottery/dao/finance_carry.go",
+      "before": null,
+      "after": "e1e14014d357418118b8621bb6c0dd1fb76fe4139021bd1f3a162e77c95e7627"
+    },
+    {
+      "path": "lottery/dao/finance_seat_net_test.go",
+      "before": null,
+      "after": "804017b0fe4d89e99e60389f01235568685f3c52c4f162b6ce109f4a6ef4965d"
+    },
+    {
+      "path": "lottery/dao/finance_seat_net.go",
+      "before": null,
+      "after": "1c88df30fed9ae725ac545cc3c9151882b881ccb4c949d1817e2ed07e6f100e0"
+    },
+    {
+      "path": "lottery/dao/unified_redis.go",
+      "before": "ad446dc14c5658434bf08d35433b640a4678da05e88d3119a64769b9eda2e150",
+      "after": "7af112e98dfbdbda31ac9b63741fee6d3874f95b8095ebe7aba3fe468acda0f3"
+    },
+    {
+      "path": "lottery/unified/finance_amount_test.go",
+      "before": null,
+      "after": "ede5c1ac9e4729b0f250d90f0dbc1d711ee5c3e5be9beb1b756f10283d31b0b4"
+    },
+    {
+      "path": "lottery/unified/finance_amount.go",
+      "before": null,
+      "after": "91a9238f0c70d47728961c14acc4552f5ff4e22b0edd151d90cb942350624dc6"
+    },
+    {
+      "path": "lottery/unified/finance_bindings.go",
+      "before": null,
+      "after": "fb232451dbbd9e1217779ed3c7013131f40355407d120d0ba97ef516fea8f97d"
+    },
+    {
+      "path": "lottery/unified/seat_net_test.go",
+      "before": null,
+      "after": "2e10482b3c5c52acd1add4f97083acd7dafa976e3216e461149095033911716e"
+    },
+    {
+      "path": "lottery/unified/seat_net.go",
+      "before": null,
+      "after": "487824a7b6fc64c3a58483fef9341f52baa0ca24056ba7a0d4b34e2640e30393"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "4486fda02ab950b19057242dae2ee10502ffb06f444d6d7108a139cc456f9ed5",
+      "after": "d51be591e444378ba3e307ac57a84c81512fed0912fbf5e654d9dd670752184b"
+    },
+    {
+      "path": "micro_service/proto/lottery.proto",
+      "before": "cca5d9f76f1843c21bb8150bba995db814074a7e262f3091d951d036a101df40",
+      "after": "e267b200e61758eec9652e271c5c21a2de226aa93e123d43373e04037e350f76"
+    },
+    {
+      "path": "micro_service/services/lottery.pb.go",
+      "before": "9566b43230199ef920b7787f7531cd9028cae633b559ee0c62c714d996f11a4e",
+      "after": "17694f580f3846828793dea1947e4e903de9604b7f086b03b3782dafde6210ed"
+    }
+  ]
+}

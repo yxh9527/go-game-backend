@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/smart_task_refund_test.go",
+      "before": "32f57fa78737f1ad66f77303e36c9722439762318820c4d0ca7e0773085ce4d0",
+      "after": "efe9a639ea6f2ed1d92e1c7504246bb3ee1d26944d1d3e71e295a61d80fd5244"
+    },
+    {
+      "path": "data-center/dao/smart_task_refund.go",
+      "before": "a4ffbf9e3a5076788373e6768ce894d1ffe6f4ba6d3ea08fd66a9c66857c4375",
+      "after": "a23e3a22573d803d06e3689d02ba6a1b34d96414044b05a418c3b41e533db67c"
+    },
+    {
+      "path": "lottery/dao/finance_bet_bill_test.go",
+      "before": null,
+      "after": "5ef5e8ffe1afce98f8bc9fb9f63083c182fe10abc0e979a85641fd5881982531"
+    },
+    {
+      "path": "lottery/dao/finance_bet_bill.go",
+      "before": null,
+      "after": "6ee6ed27639a72219b07fc4753abea6ce6aa90156a4a073c5f69fe0f411b03d7"
+    },
+    {
+      "path": "lottery/dao/finance_bet.go",
+      "before": "34c5e7ec37c601e463d25e46285ce85cfeadad61e1e6d01f9167e37b528334fe",
+      "after": "d306636f69a4032c8f2ecde4eb6f628046167406a6125ad84be32bc5461a4eab"
+    },
+    {
+      "path": "lottery/dao/finance_cancel_bill_test.go",
+      "before": null,
+      "after": "009ad9c9d27ba5955dcfd7ae19d7ac6897282b618ea48068c73952df316cb090"
+    },
+    {
+      "path": "lottery/dao/finance_cancel_bill.go",
+      "before": null,
+      "after": "bbe3c421b9694a5230e39380bd761f91b56ce7bb813a09a790eb7df11c285b10"
+    },
+    {
+      "path": "lottery/unified/bet_bills_test.go",
+      "before": null,
+      "after": "618017253f92dab29a84dde1bb6ade026e87cc9f00b6121555e94bcc54448017"
+    },
+    {
+      "path": "lottery/unified/bet_bills.go",
+      "before": null,
+      "after": "3aac806bbcd1eb83df371f0ee17b4012af4c26c2791b3a793480e001ea1739e3"
+    },
+    {
+      "path": "lottery/unified/cancel_bills_test.go",
+      "before": null,
+      "after": "a16bfc56ea0fb0ad0818642890ff5b7701dcffe0a3e5b44148189f33b74332bd"
+    },
+    {
+      "path": "lottery/unified/cancel_bills.go",
+      "before": null,
+      "after": "0444752d63684c97d4b1813b2e6440bdaf011c41d6eba1e16a66553b49f7d818"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "b84b676957de0e365af796bd5e784a1f912813e07517e96ba8ca6b08d7f82331",
+      "after": "19880d3b7263cd936c0fad543675a430944583a7e1880027f8d6f1df30f55d8b"
+    },
+    {
+      "path": "lottery/unified/settlement_reports.go",
+      "before": "75521c453d36e91381400f624247dab2c2fff01dfdea388eb4fb403b6d9f6a28",
+      "after": "ba3b813d165f469cf1b3532a35813ef5ce435a6b299549315bf9e3bfc7845f6f"
+    }
+  ]
+}

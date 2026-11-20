@@ -1,0 +1,46 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/fund_bills_test.go",
+      "before": null,
+      "after": "daf3e49581520d41dd3e1f1016aa0d70e41d931a20b9aded1592598c62005efc"
+    },
+    {
+      "path": "data-center/dao/fund_bills.go",
+      "before": null,
+      "after": "d1180f353f1e6def84a7144cbe12ccece1edf3e77aa60b866a690f632df57826"
+    },
+    {
+      "path": "data-center/dao/settlement_history.go",
+      "before": "1eb1e9a16241d2afef61009d6118f60f5e1947ef28db22aeda89a4174643063c",
+      "after": "8eb3ed0f24573adf59a88c8d1a534e8d07446c7a1746bbd781aa4e7632c55caa"
+    },
+    {
+      "path": "data-center/dao/settlement_scan.go",
+      "before": "c09fc38d4445d650bbe93a2f68d21cd452dc4f2f943e016cfa7d5a0a4f58f601",
+      "after": "1384f732bc47a24b7ca3b38ac3f6134a6f2d17bb681c4e09b856a8e6d03f98ee"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "b72fd3ec197cb4783e72c87389c9d5123f1ccd6dd5dacbeef1714e6f1baa583a",
+      "after": "13fbd0406e3bdc2c96711841e8db59227991c9b1f247ea8a2f08a8a424edc3a3"
+    },
+    {
+      "path": "lottery/dao/scratch_retirement_test.go",
+      "before": null,
+      "after": "da46880117553b482b08b17f0f2eab5d750aa85e080e7f4222cdeaa940f86995"
+    },
+    {
+      "path": "lottery/dao/scratch_retirement.go",
+      "before": null,
+      "after": "6efea36a81b9c5008820278c03bbb148091802d6befb4854eeed8b6bbfcfdc0b"
+    },
+    {
+      "path": "lottery/dao/scratch_store.go",
+      "before": "23510b320bdc40275bb98ddc885ebfcbcc5fb004eb418cc2045bc77fb9da778f",
+      "after": "872a05cfc92deb5fdf648886806675ed6818572b7bcc9488d9c5bc0f8051e59c"
+    }
+  ]
+}

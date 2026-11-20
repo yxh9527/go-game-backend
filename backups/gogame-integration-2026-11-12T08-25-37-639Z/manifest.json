@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "app/tables/gameSeed.go",
+      "before": "2ed4d335c483f99adb9d7e37e96d1d590a012bc43f39e90ded62e24216d0d423",
+      "after": "678d51135372b693d4264a9f7b5a536bdec7078662899e4b6603d489f1eb3553"
+    },
+    {
+      "path": "lottery/dao/luck5.go",
+      "before": "d552369e55a77995f1fc630f97817d3ac5a8d9ad7e1c1fa76421e09e24a12c02",
+      "after": null
+    },
+    {
+      "path": "lottery/rpc/service_luck5_test.go",
+      "before": "3ed97d180111f5d6c255a47f7845782d7a047299081dbdfd3febdcc8c06e249f",
+      "after": null
+    },
+    {
+      "path": "lottery/rpc/service_luck5.go",
+      "before": "2bc80dd3460b5243d5c3fcc6687491f3a7622f546936129dde7a0ac16ecb6d52",
+      "after": null
+    },
+    {
+      "path": "lottery/unified/scratch_test.go",
+      "before": "2d8130c05fd28f0115a8a64346435f69a9a3c0e961575fe8fefa5658cf7a3bba",
+      "after": "d149c884781481be398cde1e7138d651dffd817cb77b4bd12edef2e553364ebf"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "2e36c4450aae234660d809f0332a3fbfc75de1a65a6d11e45ede70a30954dcaa",
+      "after": "892cf7f53e7dc63517bf213fd77b329fc57d3a67fee3086fcbfd9232c20808dd"
+    },
+    {
+      "path": "micro_service/proto/lottery.proto",
+      "before": "526899a74d32adba7e17e871e09477a967dc26060b57aafa37bb0ee1038264d1",
+      "after": "0d4d41387f6ba4b916d08485db09bad7a2ac5d93dd633185104e37a6c8a8d215"
+    },
+    {
+      "path": "micro_service/services/lottery_grpc.pb.go",
+      "before": "56cb26257bfa696be02faa23a780271c62c6e6912790983f610e5d23a80dd6f6",
+      "after": "607834574cc2603458c153a0709e75b3e859f1ca957e2a27487387c78becce94"
+    },
+    {
+      "path": "micro_service/services/lottery.pb.go",
+      "before": "3f4ae3cf8b6a6230ec81de716743cb09d8a8a2d5102c9b2f3d5a8bd3f3c0398c",
+      "after": "47d58dcaf4fda3a4f686cf6441aadb7d3fd214f04ab779cb92f66dd4f71b14c0"
+    }
+  ]
+}

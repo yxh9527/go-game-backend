@@ -15,6 +15,7 @@ export default [
     component: MainLayout,
     redirect: "/new-home",
     children: [
+{"path":"match-management","name":"gogame-match","meta":{"title":"比赛管理","notCache":true,"access":["administrator","operation"]},component:()=>import("@/views/gogame-match/MatchManagement.vue")},
       {
         path: "new-home",
         name: "new-home",

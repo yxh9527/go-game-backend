@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/scratch_history.go",
+      "before": null,
+      "after": "20636dcb9fa246d25633e9323ebd50861b64c8b26d20154d088453f22aeecb5e"
+    },
+    {
+      "path": "data-center/dao/scratch_settlement_history_test.go",
+      "before": null,
+      "after": "51e701b3f140f1f55e8de86cafbe9b72c304a9acf41f4d0d244d5932808bf3de"
+    },
+    {
+      "path": "data-center/rpc/service_gogame.go",
+      "before": "eb24383af3481ffe724b4417f7db0dfed90337d4e972d49d173d26d625aa3b8f",
+      "after": "8f1013f917a88e7441b70ea40f4be0729055aca0675de695681fe277a3bc1eee"
+    },
+    {
+      "path": "lottery/dao/scratch_history_cleanup_test.go",
+      "before": null,
+      "after": "2a1496ad34dd93a6738fcb81df158ac4fc3c4029226d5b18ae9590bd38a2350f"
+    },
+    {
+      "path": "lottery/dao/scratch_history_cleanup.go",
+      "before": null,
+      "after": "4b044a098754359429501be27a8e508d2aaf00aa05bc8a0819a78dbde1f053fe"
+    },
+    {
+      "path": "lottery/dao/scratch_store.go",
+      "before": "0cf4530b1414e4e9895090e8a3377e79c5827adf095be13fdbbc6adcae853dcb",
+      "after": "23510b320bdc40275bb98ddc885ebfcbcc5fb004eb418cc2045bc77fb9da778f"
+    },
+    {
+      "path": "lottery/unified/scratch_test.go",
+      "before": "d149c884781481be398cde1e7138d651dffd817cb77b4bd12edef2e553364ebf",
+      "after": "add522b3dfc1f89e32e6e6398e98f8d2a6eae5bbe7e28e6c77e8806a5611c718"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "892cf7f53e7dc63517bf213fd77b329fc57d3a67fee3086fcbfd9232c20808dd",
+      "after": "6d3f97e90b673d46950052ee1e3b70c30e7ad948bd5695458e77ce6a155668a2"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "70a314475f321997f0f78fa1a81c9fb9e18c326b6dfbc951d7b895a4916c1b8b",
+      "after": "35b28b4d1d3711803b59cbf7a002af1d7a790db6758b6bbb09b8edc30d41d03e"
+    }
+  ]
+}

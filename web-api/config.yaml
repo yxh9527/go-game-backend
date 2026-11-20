@@ -9,13 +9,13 @@ mysql:
     user: "root"
     port: 3306
     password: "yxh2362023!@#"
-    database: "fg_player"
+    database: "go_player"
   manager:
     host: "172.21.211.214"
     user: "root"
     port: 3306
     password: "yxh2362023!@#"
-    database: "fg_web_manager"
+    database: "go_manager"
 elastic:
   hosts:
     - "http://172.21.211.214:9200"

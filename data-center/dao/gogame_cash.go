@@ -13,6 +13,8 @@ import (
 )
 
 const cashMax int64 = 9007199254740991
+const cashMaxAccounts = 1024
+const cashMaxSteps = 4096
 
 var cashID = regexp.MustCompile(`^[a-zA-Z0-9_.:/-]{1,200}$`)
 var cashCurrency = regexp.MustCompile(`^[A-Z0-9]{1,12}$`)
@@ -91,7 +93,7 @@ func CashRead(ctx context.Context, client redis.UniversalClient, a CashAccount) 
 	return json.RawMessage(raw), cashError(err)
 }
 func CashApply(ctx context.Context, client redis.UniversalClient, request CashRequest) (json.RawMessage, error) {
-	if !cashID.MatchString(request.ID) || len(request.Accounts) == 0 || len(request.Accounts) > 64 || len(request.Steps) == 0 || len(request.Steps) > 1024 {
+	if !cashID.MatchString(request.ID) || len(request.Accounts) == 0 || len(request.Accounts) > cashMaxAccounts || len(request.Steps) == 0 || len(request.Steps) > cashMaxSteps {
 		return nil, status.Error(codes.InvalidArgument, "invalid cash transaction size or id")
 	}
 	if client == nil {

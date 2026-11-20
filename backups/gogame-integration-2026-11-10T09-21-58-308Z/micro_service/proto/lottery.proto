@@ -1,0 +1,590 @@
+syntax = "proto3";
+
+option go_package = "./services;services";
+
+package lottery;
+
+import "base.proto";
+
+service LotteryService {
+    // 扣除玩家余额并登记本局下注；同一 roundId + betId 重试不会重复扣款。
+    rpc Bet(BetRequest) returns (BetResponse);
+    // 根据冻结后的下注摘要和候选结果，申请奖池赔付预留。
+    rpc PrePay(PrePayRequest) returns (PrePayResponse);
+    // 延长已成功的赔付预留有效期；只改 expiresAt，不改金额/结果/奖池占用。
+    // 禁止用 PrePay 做续期。仅 RESERVED 可续；超时由资金侧自动 EXPIRED 并回退水池。
+    rpc RenewReservation(RenewReservationRequest) returns (RenewReservationResponse);
+    // 批量结算本局全部真人玩家，或按 VOID_REFUND 原路退回全部下注。
+    rpc Settlement(SettlementRequest) returns (SettlementResponse);
+    // 查询本局资金状态，用于 RPC 超时确认和人工审核。
+    rpc GetRoundFinanceState(GetRoundFinanceStateReq) returns (GetRoundFinanceStateResp);
+    // 百人玩家主动取消本局 ACTIVE 投注；退款金额由资金侧按 ACTIVE 投注计算，不由游戏服传入。
+    // 禁止用 PrePay/Settlement/VOID_REFUND 代替本接口。成功后牌局仍保持 BETTING。
+    rpc CancelBet(CancelBetRequest) returns (CancelBetResponse);
+    // 只读水池控制决策：游戏服提交 win/natural/lose 等候选的 bet/payout，
+    // 资金侧根据水池可赔付能力选择一套结果。不扣款、不预留、不改账本。
+    rpc GetPoolControlDecision(GetPoolControlDecisionRequest) returns (GetPoolControlDecisionResponse);
+    //获取水池数据
+    rpc PoolAmountResult(PoolAmountResultReq) returns (PoolAmountResultResp);
+
+    // 权威余额查询（供 CommonRpcProd.getBalance）
+    rpc GetBalance(GetBalanceReq) returns (GetBalanceResp);
+
+    // 长期游戏状态存储（供 StorageRpcProd，落库不走注单链路）
+    rpc SaveGameStorage(SaveGameStorageReq) returns (SaveGameStorageResp);
+    rpc LoadGameStorage(LoadGameStorageReq) returns (LoadGameStorageResp);
+    rpc DeleteGameStorage(DeleteGameStorageReq) returns (DeleteGameStorageResp);
+
+    // 新服正式环境门面
+    rpc SlotsDoBet(SlotsDoBetReq) returns (SlotsDoBetResp);
+    rpc SlotsDoBetFree(SlotsDoBetFreeReq) returns (SlotsDoBetResp);
+    // UG5 竞猜：每次增量结算，complete 时才写整链注单
+    rpc Ug5Guess(Ug5GuessReq) returns (Ug5GuessResp);
+    rpc FruitDoBet(FruitDoBetReq) returns (FruitDoBetResp);
+    rpc Luck5Deal(Luck5DealReq) returns (Luck5Resp);
+    rpc Luck5Settle(Luck5SettleReq) returns (Luck5Resp);
+    rpc FruitDoBetMulti(FruitDoBetMultiReq) returns (FruitDoBetMultiResp);
+    rpc FruitRefundMulti(FruitRefundMultiReq) returns (FruitRefundMultiResp);
+    rpc FruitSettleRound(FruitSettleRoundReq) returns (FruitSettleRoundResp);
+    rpc SetUserIcon(SetUserIconReq) returns (SetUserIconResp);
+}
+
+message SetUserIconReq {
+    uint32 userId = 1;
+    uint32 Icon = 2;
+    uint32 game_id = 3;
+}
+
+message SetUserIconResp {
+    base.error_code code = 1;
+}
+
+message PoolAmountResultReq {
+    uint32 agentId = 1;
+    uint32 gameId = 2;
+    string currencyType = 4;
+}
+
+message PoolAmountResultResp {
+    base.error_code code = 1;
+    string currency = 2;
+}
+
+message GetBalanceReq {
+    uint32 userId = 1;
+}
+
+message GetBalanceResp {
+    base.error_code code = 1;
+    string currency = 2;     // 元，两位小数
+    int64 currencyCent = 3;  // 分，权威整数值
+}
+
+message SaveGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+    string payload = 5;
+    int64 expireSeconds = 6; // <=0 表示不过期
+}
+
+message SaveGameStorageResp {
+    base.error_code code = 1;
+}
+
+message LoadGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+}
+
+message LoadGameStorageResp {
+    base.error_code code = 1;
+    bool found = 2;
+    string payload = 3;
+}
+
+message DeleteGameStorageReq {
+    uint32 userId = 1;
+    uint32 gameId = 2;
+    string currencySymbol = 3;
+    string storageKey = 4;
+}
+
+message DeleteGameStorageResp {
+    base.error_code code = 1;
+}
+
+message GameStorageItem {
+    string storageKey = 1;
+    string payload = 2;
+    int64 expireSeconds = 3;
+}
+
+message SlotDoBetFlowControl {
+    string refundPoolAmount = 1;           // 未使用预占退回水池金额（元）
+    repeated string deleteGameStorageKeys = 2;
+}
+
+message SlotsDoBetReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string winAmount = 7;
+    string preWinAmount = 8; // 预占最大赔付，对应 MaxProfitLoss
+    string account = 9;
+    string recordJson = 10;  // UserRecordInfo JSON；同时作为注单 log
+    repeated GameStorageItem gameStorage = 11;
+    SlotDoBetFlowControl flowControl = 12;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message SlotsDoBetFreeReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string winAmount = 6;
+    string account = 7;
+    string recordJson = 8; // 可空；纯状态 action 可不传注单
+    string totalBetAmount = 9; // 原普通局下注，用于 Complete 统计
+    bool complete = 10;
+    repeated GameStorageItem gameStorage = 11;
+    SlotDoBetFlowControl flowControl = 12;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message SlotsDoBetResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+    string error = 5;
+}
+
+message Ug5GuessReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5; // 整条竞猜链标识，不依赖中途记录
+    string betAmount = 6; // 本次扣款，元；按毛金额传输，不在 game server 扣税
+    string winAmount = 7; // 本次派奖，元；按毛金额传输，不在 game server 扣税
+    bool complete = 8;
+    string recordJson = 9; // 中途必须为空；结束必须是整链记录，统计取记录而非增量金额
+    repeated GameStorageItem gameStorage = 10;
+    repeated string deleteGameStorageKeys = 11;
+}
+
+message Ug5GuessResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+    string error = 5;
+}
+
+message FruitDoBetReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string winAmount = 7;
+    string recordJson = 8;
+    bool complete = 9;
+    double averageBet = 13;  // 购买免费触发局才带值：整段免费按赠送次数折算的每转平均下注（元）；其余为 0
+}
+
+message FruitDoBetResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message Luck5DealReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    string reserveAmount = 7;
+}
+
+message Luck5SettleReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string winAmount = 6;
+    string recordJson = 7;
+}
+
+message Luck5Resp {
+    base.error_code code = 1;
+    bool ret = 2;
+    int64 currencyCent = 3;
+    string error = 4;
+}
+
+message FruitDoBetMultiReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+    uint32 areaId = 7;
+}
+
+message FruitDoBetMultiResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message FruitRefundMultiReq {
+    uint32 userId = 1;
+    uint32 agentId = 2;
+    uint32 gameId = 3;
+    string currencyType = 4;
+    string roundId = 5;
+    string betAmount = 6;
+}
+
+message FruitRefundMultiResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    string currency = 3;
+    int64 currencyCent = 4;
+}
+
+message FruitSettlePlayer {
+    uint32 userId = 1;
+    string userName = 2;
+    int32 userIcon = 3;
+    string totalBet = 4;
+    string winAmount = 5;
+    string recordJson = 6;
+    string account = 7;
+}
+
+message FruitSettleRoundReq {
+    uint32 gameId = 1;
+    uint32 agentId = 2;
+    string currencyType = 3;
+    int64 period = 4;
+    string roundId = 5;
+    repeated FruitSettlePlayer players = 6;
+}
+
+message FruitSettlePlayerResult {
+    uint32 userId = 1;
+    string currency = 2;
+    int64 currencyCent = 3;
+}
+
+message FruitSettleRoundResp {
+    base.error_code code = 1;
+    bool ret = 2;
+    repeated FruitSettlePlayerResult players = 3;
+}
+
+
+// 单笔下注。金额使用玩家币种的十进制字符串，最多保留两位小数。
+message BetItem {
+    // 本局内唯一的下注编号，也是单笔下注的幂等键。
+    string betId = 1;
+    // 真人玩家编号。
+    uint32 userId = 2;
+    // 玩家账户币种；奖池入账前会按汇率换算为 CNY。
+    string currencyType = 3;
+    // 实际扣除的玩家余额。
+    string amount = 4;
+    // 可选的下注区域或玩法标识。
+    string areaId = 5;
+}
+
+// 一次下注请求可以包含本局一个或多个真人玩家的下注。
+message BetRequest {
+    // 本次 RPC 请求编号，用于审计和问题追踪。
+    string requestId = 1;
+    // 牌局唯一编号。
+    string roundId = 2;
+    // 游戏编号。
+    uint32 gameId = 3;
+    // 代理编号。
+    uint32 agent = 4;
+    // 房间等级；参与奖池二级键 agentId_symbol_level 的路由。
+    uint32 level = 5;
+    // 6、7 为已删除字段的历史编号，禁止复用以保持线协议兼容。
+    reserved 6, 7;
+    // 本次提交的下注列表；批量请求按项返回结果，不回滚已成功项。
+    repeated BetItem items = 8;
+}
+
+// 单笔下注处理结果。
+message BetItemResult {
+    string betId = 1;
+    uint32 userId = 2;
+    // 该下注的业务错误码。
+    base.error_code code = 3;
+    // true 表示已扣款并计入本局下注摘要。
+    bool accepted = 4;
+    // 扣款后的玩家余额。
+    string currency = 5;
+    // 失败原因说明，成功时为空。
+    string message = 6;
+}
+
+// 下注响应。
+message BetResponse {
+    base.error_code code = 1;
+    string roundId = 2;
+    // 当前资金状态，下注阶段通常为 BETTING。
+    string state = 3;
+    // 本局全部已接受下注的 SHA-256 摘要。
+    string betDigest = 4;
+    repeated BetItemResult items = 5;
+}
+
+// 单个真人玩家的候选赔付。
+message PrePayItem {
+    uint32 userId = 1;
+    string currencyType = 2;
+    // 实际返还玩家的总金额，不是净利润。
+    string payout = 3;
+}
+
+// 赔付预留请求，必须覆盖本局全部有效真人玩家。
+message PrePayRequest {
+    string requestId = 1;
+    string roundId = 2;
+    uint32 gameId = 3;
+    uint32 agent = 4;
+    uint32 level = 5;
+    // 必须与资金服务按已接受下注计算出的摘要完全一致。
+    string betDigest = 6;
+    // 完整候选游戏结果的摘要。
+    string outcomeHash = 7;
+    // 预留有效秒数；传 0 使用服务默认值 300 秒。
+    uint32 timeoutSeconds = 8;
+    repeated PrePayItem items = 9;
+    string reservationMode = 10;
+}
+
+// 赔付预留响应。
+message PrePayResponse {
+    base.error_code code = 1;
+    // true 表示本次赔付预留成功。
+    bool success = 2;
+    string roundId = 3;
+    string state = 4;
+    // 本次预留的唯一编号。
+    string reservationId = 5;
+    // 按汇率换算后的 CNY 预留总额。
+    string totalPayoutCny = 6;
+    // Unix 秒级过期时间。
+    int64 expiresAt = 7;
+    // INVALID_REQUEST、BET_MISMATCH、ROUND_CONFLICT 或 INSUFFICIENT_POOL。
+    string reason = 8;
+    string betDigest = 9;
+    string outcomeHash = 10;
+    string reservationMode = 11;
+}
+
+// 延长预留有效期：只续命，不改金额/结果。
+message RenewReservationRequest {
+    string requestId = 1;
+    string roundId = 2;
+    uint32 gameId = 3;
+    uint32 agent = 4;
+    uint32 level = 5;
+    // 必须与当前生效的 reservationId 一致。
+    string reservationId = 6;
+    // 可选一致性校验：非空时必须与当前预留一致。
+    string betDigest = 7;
+    string outcomeHash = 8;
+    // 从 now 起再保留的秒数；0 使用默认 60 秒。
+    // 新 expiresAt = max(旧 expiresAt, now + extendSeconds)。
+    uint32 extendSeconds = 9;
+}
+
+message RenewReservationResponse {
+    base.error_code code = 1;
+    bool success = 2;
+    string roundId = 3;
+    string state = 4;
+    string reservationId = 5;
+    int64 expiresAt = 6;
+    // INVALID_REQUEST / NOT_RESERVED / EXPIRED / ROUND_CONFLICT / BET_MISMATCH
+    string reason = 7;
+    string betDigest = 8;
+    string outcomeHash = 9;
+    string reservationMode = 10;
+}
+
+// 单个真人玩家的结算数据。
+message SettlementItem {
+    uint32 userId = 1;
+    string currencyType = 2;
+    // 本局该玩家全部已接受下注的汇总金额。
+    string betAmount = 3;
+    // 实际返还玩家账户的金额；玩家输时也必须提交 0。
+    string payout = 4;
+    // 玩家净利润，必须等于 payout - betAmount，允许为负数。
+    string profit = 5;
+    // 游戏侧提供的完整注单详情。
+    string record = 6;
+    // 游戏侧计算的抽水金额，使用玩家币种。
+    string pump = 7;
+}
+
+// 批量结算请求，必须覆盖本局全部有效真人玩家且不能重复。
+message SettlementRequest {
+    // 全局唯一结算编号，也是结算幂等键。
+    string settlementId = 1;
+    string roundId = 2;
+    uint32 gameId = 3;
+    uint32 agent = 4;
+    uint32 level = 5;
+    string reservationId = 6;
+    string betDigest = 7;
+    string outcomeHash = 8;
+    // NORMAL 为正常赔付，VOID_REFUND 为全额退回下注并关闭本局。
+    string mode = 9;
+    repeated SettlementItem items = 10;
+}
+
+// 单个玩家的结算结果。
+message SettlementItemResult {
+    uint32 userId = 1;
+    base.error_code code = 2;
+    string currency = 3;
+    string message = 4;
+}
+
+// 批量结算响应。
+message SettlementResponse {
+    base.error_code code = 1;
+    string roundId = 2;
+    string state = 3;
+    string settlementId = 4;
+    repeated SettlementItemResult items = 5;
+}
+
+// 按牌局编号查询资金状态。
+message GetRoundFinanceStateReq {
+    string roundId = 1;
+}
+
+// 牌局资金状态快照。
+message GetRoundFinanceStateResp {
+    base.error_code code = 1;
+    string roundId = 2;
+    // BETTING、RESERVED、SETTLED、VOIDED 或 EXPIRED。
+    string state = 3;
+    string betDigest = 4;
+    string reservationId = 5;
+    string outcomeHash = 6;
+    int64 expiresAt = 7;
+    string settlementId = 8;
+    // 本局全部已接受下注换算后的 CNY 总额。
+    string totalBetCny = 9;
+    // 当前预留记录的 CNY 金额。
+    string totalReservedCny = 10;
+    string reservationMode = 11;
+    repeated PrePayItem reservedItems = 12;
+    // 本局下注修订号；取消成功后递增，新 betId 必须带上该 revision。
+    int64 betRevision = 13;
+}
+
+message CancelBetRequest {
+    // 强幂等键：重复请求不重复退款、不重复冲销 agent_effect。
+    string requestId = 1;
+    string roundId = 2;
+    uint32 gameId = 3;
+    uint32 agent = 4;
+    uint32 level = 5;
+    uint32 userId = 6;
+    string currencyType = 7;
+    // 调用方看到的下注摘要；用于发现本地与资金侧不一致。
+    string expectedBetDigest = 8;
+}
+
+message CancelBetResponse {
+    base.error_code code = 1;
+    bool success = 2;
+    // 资金侧按本局该玩家全部 ACTIVE 投注汇总的退款金额。
+    string refundAmount = 3;
+    // 退款后的玩家钱包余额（与 SettlementItemResult.currency 同口径）。
+    string currency = 4;
+    string betDigest = 5;
+    int64 betRevision = 6;
+    repeated string canceledBetIds = 7;
+    string roundId = 8;
+    // 成功后仍为 BETTING。
+    string state = 9;
+    string reason = 10;
+}
+
+// 单个控制候选：由游戏服预先生成完整结果后，仅上送经济摘要。
+message PoolControlCandidate {
+    // 候选唯一编号，例如 win / natural / lose。
+    string id = 1;
+    // NATURAL / PLAYER_WIN / PLAYER_LOSE；可空，空则按 id 推断。
+    string mode = 2;
+    // 该候选下真人总下注（玩家币种）。
+    string betAmount = 3;
+    // 该候选下真人总返还 payout（玩家币种，不是净利润）。
+    string payout = 4;
+}
+
+// 水池控制决策请求。不依赖已有 finance round，可在下注前调用。
+message GetPoolControlDecisionRequest {
+    // 请求编号，用于审计；建议同时作为 decisionId 幂等关联键。
+    string requestId = 1;
+    // 可选牌局编号，仅审计用。
+    string roundId = 2;
+    uint32 gameId = 3;
+    uint32 agent = 4;
+    uint32 level = 5;
+    // 金额币种；换算 CNY 后参与可赔付判断。
+    string currencyType = 6;
+    // 可选：用于可赔付公式中的玩家统计；0 表示仅按水池水位判断。
+    uint32 userId = 7;
+    // 至少 1 个候选；通常为 win/natural/lose 三套。
+    repeated PoolControlCandidate candidates = 8;
+    // 可选偏好模式；仅当该模式候选可赔付时优先采用。
+    string preferredMode = 9;
+}
+
+// 水池控制决策响应。
+message GetPoolControlDecisionResponse {
+    base.error_code code = 1;
+    // NATURAL / PLAYER_WIN / PLAYER_LOSE。
+    string mode = 2;
+    // 选中的候选 id。
+    string selectedCandidateId = 3;
+    // 选中候选的 payout（玩家币种原样回传）。
+    string maxPayout = 4;
+    // 本次决策编号，供游戏服写入 controlPlan / 审计。
+    string decisionId = 5;
+    // 决策原因：OK / NO_CANDIDATE / POOL_TIGHT_FALLBACK_LOSE / PREFERRED_UNAVAILABLE 等。
+    string reason = 6;
+    // 选中候选换算后的 CNY 净赔付 max(0, payout-bet)。
+    string selectedNetPayoutCny = 7;
+    // 当前可用水池 CNY 快照（仅参考，非锁定额度）。
+    string poolAvailableCny = 8;
+}

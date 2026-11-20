@@ -73,11 +73,27 @@ func (d *gogameStorageService) Call(ctx context.Context, req *services.GogameSto
 	defer cancel()
 	var value any
 	var err error
-	if req.Operation == "userCenter" || req.Operation == "userCenterWrite" {
+	if req.Operation == "smartTaskResolve" {
+		repository, ok := d.db.(*dao.DBDao)
+		if !ok {
+			return nil, status.Error(codes.Unavailable, "task resolution source unavailable")
+		}
+		value, err = repository.ResolveSmartTask(ctx, d.es, req.Payload)
+	} else if req.Operation == "scratchHistory" {
+		repository, ok := d.db.(*dao.DBDao)
+		if !ok || d.es == nil {
+			return nil, status.Error(codes.Unavailable, "settlement history source unavailable")
+		}
+		var query dao.ScratchHistoryQuery
+		if err = dao.DecodeGogameJSON(req.Payload, &query); err == nil {
+			value, err = repository.ScratchHistory(ctx, d.es, query)
+		}
+	} else if req.Operation == "userCenter" || req.Operation == "userCenterWrite" || req.Operation == "holdemReplayWrite" {
 		repository, ok := d.db.(*dao.DBDao)
 		if !ok || d.es == nil {
 			return nil, status.Error(codes.Unavailable, "user-center data source unavailable")
 		}
+
 		if req.Operation == "userCenter" {
 			var query dao.UserCenterQuery
 			if err = dao.DecodeGogameJSON(req.Payload, &query); err == nil {
@@ -88,7 +104,11 @@ func (d *gogameStorageService) Call(ctx context.Context, req *services.GogameSto
 				Records []dao.UserCenterRecord `json:"records"`
 			}
 			if err = dao.DecodeGogameJSON(req.Payload, &input); err == nil {
-				value, err = repository.WriteUserCenter(ctx, d.es, input.Records)
+				if req.Operation == "holdemReplayWrite" {
+					value, err = repository.WriteHoldemReplays(ctx, d.es, input.Records)
+				} else {
+					value, err = repository.WriteUserCenter(ctx, d.es, input.Records)
+				}
 			}
 		}
 	} else {

@@ -37,7 +37,7 @@ module.exports = {
   // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
   devServer: {
     // proxy: "http://172.21.211.213:8000"
-    proxy: 'http://172.21.211.215:9529'
+    proxy: {"^/gogame-match":{target:process.env.VUE_APP_MATCH_PROXY||"http://127.0.0.1:11040",changeOrigin:true,pathRewrite:{"^/gogame-match":""}},"/api":{target:"http://172.21.211.215:9529",changeOrigin:true}}
   },
   outputDir: "web-agent"
 };

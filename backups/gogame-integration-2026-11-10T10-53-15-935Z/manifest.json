@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "app/tables/dbInit.go",
+      "before": "9cba2b983160e038d4d4057f77a5379c94e267b31bd0daf609dfbeec28cabca4",
+      "after": "2ec54b9f8031cf7a6717ea2788629ff9d7b446e8407febeb1e9d07bb00b0c357"
+    },
+    {
+      "path": "app/tables/gogame/scratch_storage.go",
+      "before": null,
+      "after": "fcae061caea1cdcb5f03ca275fe5261da845c0c52fb2ef22d9d01aeb9b747631"
+    },
+    {
+      "path": "lottery/dao/scratch_mysql.go",
+      "before": null,
+      "after": "2b89495c12d0520a861a7fad9833b1d9bcd99e741720b6ab641d86b33790549d"
+    },
+    {
+      "path": "lottery/dao/scratch_store.go",
+      "before": null,
+      "after": "0cf4530b1414e4e9895090e8a3377e79c5827adf095be13fdbbc6adcae853dcb"
+    },
+    {
+      "path": "lottery/rpc/service_unified.go",
+      "before": "003a688223b737276c58be044c3384bbb8cdb03cb0d459150416908cab665877",
+      "after": "462d546c24df56808924d90c5258ca34b1793e5ad43052268714cdc348824076"
+    },
+    {
+      "path": "lottery/unified/scratch_rpc_fixture_test.go",
+      "before": null,
+      "after": "e44dbbec1e3f999c940416f2c6ad18b945d54b26783072756740c7eb1ab2fdb0"
+    },
+    {
+      "path": "lottery/unified/scratch_test.go",
+      "before": null,
+      "after": "2d8130c05fd28f0115a8a64346435f69a9a3c0e961575fe8fefa5658cf7a3bba"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": null,
+      "after": "bd4bd069cff5996b8b6bcfcdd4fa6cae63f52541850ffb216228644f45be6512"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "d51be591e444378ba3e307ac57a84c81512fed0912fbf5e654d9dd670752184b",
+      "after": "e206b6484b80a7f5c59407a4ae1ef02f3a8b0b62fe9c1051ac9dfbdbbb1d960a"
+    },
+    {
+      "path": "micro_service/proto/lottery.proto",
+      "before": "e267b200e61758eec9652e271c5c21a2de226aa93e123d43373e04037e350f76",
+      "after": "526899a74d32adba7e17e871e09477a967dc26060b57aafa37bb0ee1038264d1"
+    },
+    {
+      "path": "micro_service/services/lottery_grpc.pb.go",
+      "before": "0e756fa0a81e3f419d6bddd09b91529962520be219820fbfea0af13bb9f72e1d",
+      "after": "56cb26257bfa696be02faa23a780271c62c6e6912790983f610e5d23a80dd6f6"
+    },
+    {
+      "path": "micro_service/services/lottery.pb.go",
+      "before": "17694f580f3846828793dea1947e4e903de9604b7f086b03b3782dafde6210ed",
+      "after": "3f4ae3cf8b6a6230ec81de716743cb09d8a8a2d5102c9b2f3d5a8bd3f3c0398c"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/player_panel_arrangements_test.go",
+      "before": null,
+      "after": "cc45908a7805de16db709b24ac0e8e0a5526da92982ec4fc4f7196fb21578fdf"
+    },
+    {
+      "path": "data-center/dao/player_panel_blackjack_actions_test.go",
+      "before": null,
+      "after": "3cf2c801db1092ea3a5c903fa1d8147798d774914eb4d2d0a4be6d3a388a6c6d"
+    },
+    {
+      "path": "data-center/dao/player_panel_mahjong_discards_test.go",
+      "before": null,
+      "after": "6e40148b34f3c1fde583fac319e497b822c466f3dcb4d9e7dcff552f8041146c"
+    },
+    {
+      "path": "data-center/dao/player_panel_seat_choices_test.go",
+      "before": null,
+      "after": "a412ed155779834a54ce738b1058d7a5c4da7c11eaf234bd2fcd983403dec3e3"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals_test.go",
+      "before": "6233ae6473ff5319573f7fc1123d61a4cc695e5c720cedb1f8ee62eda1db0930",
+      "after": "70eff0a7d2c1da9a6e37f5082532cbd39c5ae679adb718d98cb8625370f6a028"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals.go",
+      "before": "ceba903352e6133ff455c8d91b6bfc0e9a299d0bddfe68a943089c67f3d20525",
+      "after": "b7dd5aaa9e6f03659b724f528e78708a4347cfa3af96ccde0e4d92785c0cc536"
+    },
+    {
+      "path": "data-center/dao/player_panel.go",
+      "before": "ff93047452a49b9992dc1ef7c1da85b44b5bca82f54b62bfaf9684bbeb8afc76",
+      "after": "37f0684e25b6fe0997897cc4d6b16564d712bbebf5f98acd49aed40628e0806d"
+    },
+    {
+      "path": "lottery/dao/scratch_delivery_cleanup_test.go",
+      "before": null,
+      "after": "4a14a05e4d97c91750f14e39aae3393cba61aa70cba37628769d13a4e01d8eec"
+    },
+    {
+      "path": "lottery/dao/scratch_delivery_cleanup.go",
+      "before": null,
+      "after": "eb4ef0ee2ae9a009fa598f8028d17c4e6fff44293102de16a797a25eb0dce8fa"
+    },
+    {
+      "path": "lottery/dao/scratch_mysql.go",
+      "before": "2b89495c12d0520a861a7fad9833b1d9bcd99e741720b6ab641d86b33790549d",
+      "after": "3da09a0165d60ad04b4f18b527fc88eef256a175a422f1641ae06fd25958c2d2"
+    },
+    {
+      "path": "lottery/dao/scratch_pending_compaction_test.go",
+      "before": null,
+      "after": "81416de6e543a38a951f6da0bd735665b76f9d149cee07c4bbfd7d4ea724e929"
+    },
+    {
+      "path": "lottery/dao/scratch_pending_compaction.go",
+      "before": null,
+      "after": "868c09080e2b7a8568c59772b5b45db427460df6abcbb4d2a74676b5ba42eb3b"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_compaction.go",
+      "before": "589ea86f95b41a234dfc14bdf81399372e1461056f4f23a0964c3d7e8afa8df1",
+      "after": "fbfdcc26d3d5c046a05c31c6d9f8a0e547f81dc4f5d7fb0e2580be1a52b1e8bb"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_retention.go",
+      "before": "a9e1bec273d7d98fdc897372238b6822f69b92364475e1e1ef1d97bfc12fde91",
+      "after": "d2bb895e40dda07018c13eba689f2ca9b5a5562b052d6e25c0e8c7b22a1979fa"
+    },
+    {
+      "path": "lottery/dao/scratch_retirement_test.go",
+      "before": "da46880117553b482b08b17f0f2eab5d750aa85e080e7f4222cdeaa940f86995",
+      "after": "2d3192bccb4d361da6cf42e8121f3ea0f5715b94a3f8e3410cd5e384f0c0a92a"
+    },
+    {
+      "path": "lottery/dao/scratch_retirement.go",
+      "before": "6efea36a81b9c5008820278c03bbb148091802d6befb4854eeed8b6bbfcfdc0b",
+      "after": "49e67ea0bb5103330e5b9b3896ec30aa4383a2304b535dc2646c569a3f1aaa63"
+    },
+    {
+      "path": "lottery/dao/scratch_sold_test.go",
+      "before": null,
+      "after": "efc5990cc702542df563aa7ef48e26d8ef96fd489e726764fe0e92964f0f06d2"
+    },
+    {
+      "path": "lottery/dao/scratch_sold.go",
+      "before": null,
+      "after": "3e6f69d434ec851173f8d96a50b8a6c024c8da094e3477e21ea6c12f146ec61c"
+    },
+    {
+      "path": "lottery/dao/scratch_store.go",
+      "before": "9dac32c2602cdc47194afe86f5904506f38fad7356d2df49656c1a4536250418",
+      "after": "8414183a38bf62329120b458de15dde755056b519c4b95ce11be004b6115a399"
+    },
+    {
+      "path": "lottery/unified/scratch_delivery_cleanup_test.go",
+      "before": null,
+      "after": "bcfc102719573f6fc1608663bc8bb83e5f729be1ba8a3ecbd936fedecaa113f2"
+    },
+    {
+      "path": "lottery/unified/scratch_pending_compaction_test.go",
+      "before": null,
+      "after": "546a537dce1bd20449c6f867c5ea897c992b542c03aefd6bb7e9c79583d26f37"
+    },
+    {
+      "path": "lottery/unified/scratch_rpc_fixture_test.go",
+      "before": "e44dbbec1e3f999c940416f2c6ad18b945d54b26783072756740c7eb1ab2fdb0",
+      "after": "0abe5c08f0e1c81b4d05a4b0c0678617c525c6191ba3f9f69d48deacd41c5839"
+    },
+    {
+      "path": "lottery/unified/scratch_sold_retention_test.go",
+      "before": null,
+      "after": "f8c5aef4b4a6d0cf3a2463ebf59ee317be154b9fe4c3c1db5d35320f485a1f1a"
+    },
+    {
+      "path": "lottery/unified/scratch_test.go",
+      "before": "2424a20628c421738d1ca08a430bfb648b632ed0748a2089a806ec5d748697e8",
+      "after": "5043fb545c08cb43fadbdc505a9502ba75ed22b28dc0b8a2440dd65267cdc066"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "d05d5cb43665809a29ac727b6cb76ddf0d2e9cec9c92ee97d2e743af8d7a0ff4",
+      "after": "2c3267b7589575835d9389ddbdd03f16648447e76125b26b0091978783b6c57c"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "1f57d854719e1a025fa856998247a72b808d56dc1433fb6ddbdd42e3148cc7e8",
+      "after": "01f958e23708df975ef04fdf701bcac71a2e8bd8a8236852e6718fda71f964fc"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "data-center/dao/gogame_payments_test.go",
+      "before": "7429e87843cbfc94e5d3c88bc97c50a8729c525429fcb596279633ef048e95e9",
+      "after": "d79f52bae31dac17ac6514c68e1b9704fd7a600d9bf724fbd49e3430205327a6"
+    },
+    {
+      "path": "data-center/dao/gogame_payments.go",
+      "before": "7932f0a81b1a4a56dada24d7258ed1613f4c223f890141f2c15dbec5097f263c",
+      "after": "210ae3a7e036234a088414bdf7714801e02783397a4cf38dd3c017cc39df07ba"
+    },
+    {
+      "path": "data-center/dao/gogame_ticket_credit_test.go",
+      "before": null,
+      "after": "38b116e39e0c32bba5c8111ad225416b98a31627c5810292649672f6cd4a6a80"
+    },
+    {
+      "path": "data-center/dao/gogame_ticket_credit.go",
+      "before": null,
+      "after": "2bd5dd0f1a944b22f531bfb55b1095196562ed288cc96894577d236e34cfa652"
+    },
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "7bc4266e891e6197ec2fe7772386535798b709fe3bc4fa67e74434f89c5a9b13",
+      "after": "0889d8c35e55828c8bd11778ac3f54eb8792e203d1ffd76205214bfe4ca07e05"
+    }
+  ]
+}

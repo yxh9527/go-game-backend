@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "date": "2026-11-10",
+  "files": [
+    {
+      "path": "app/tables/gogame/room_config.go",
+      "before": "ad53e7f365507ffc684602e3835ad0b2558c69a5a5ac43c56c730b78ab5f4507",
+      "after": "c31270121a5fbebb702d5a34fcc7d4297f34f85156d641f63daa43edd7f75efd"
+    },
+    {
+      "path": "lottery/dao/finance_bet.go",
+      "before": null,
+      "after": "3fbd2cdb825761c8f9a1ba6920ebee83852bcaf6c81077afb648e2a94080395e"
+    },
+    {
+      "path": "lottery/dao/finance_safety_test.go",
+      "before": null,
+      "after": "2d66084fbeac41e09cb083fecda41e0e120a500c837fe4c6e5f5d5bbb95f3741"
+    },
+    {
+      "path": "lottery/dao/unified_redis.go",
+      "before": "23d07e99637296ce6816a99923a62cc3f5b667bc8270c1b64f5fa10071a574a4",
+      "after": "ad446dc14c5658434bf08d35433b640a4678da05e88d3119a64769b9eda2e150"
+    },
+    {
+      "path": "lottery/unified/bet_commit.go",
+      "before": null,
+      "after": "99e9421091c156c17f81caf96bc1412c13aea1de1bbc47f5ec015587d71e7b14"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "89df5af919175dbb00d87cfb10705b955ddbae6ab811c171591404669f0143b6",
+      "after": "4486fda02ab950b19057242dae2ee10502ffb06f444d6d7108a139cc456f9ed5"
+    }
+  ]
+}

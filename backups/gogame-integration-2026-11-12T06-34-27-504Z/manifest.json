@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "data-center/dao/gogame.go",
+      "before": "fbfd1caaa10dd232bae2e98da8a7c799f0510176cca39e0897660d29c47f5078",
+      "after": "2841a55fb229feabe7e3b20b453836d9b6a59e3a3eea384adf90a7bf6defafeb"
+    },
+    {
+      "path": "data-center/dao/smart_task_attempt_test.go",
+      "before": null,
+      "after": "0060f8c8af7b0fc14d080344fe5cdaef0770ff57d8ed1a6b44aa5e1e7e052401"
+    },
+    {
+      "path": "data-center/dao/smart_task_attempt.go",
+      "before": null,
+      "after": "e980c9d30f72d82a5bf42c9596836903ed8634c989864825075a2dfbe887650a"
+    },
+    {
+      "path": "data-center/dao/smart_task_control.go",
+      "before": "3bc0f844de31a433214b33fb81416ad82df44176af76b67d61d5c91fb2cc40a3",
+      "after": "c8ce93cfd88bf0b61cf373b97c36d1496fc3d369af316b64f133d0506824a600"
+    },
+    {
+      "path": "data-center/dao/smart_task.go",
+      "before": "1a586a0fa465f621d8a245d77f5aa71a99b47300287c2e0dd3e3e246f5e5b600",
+      "after": "cc5ab713b5aeae899533c2e567fed1d216b36777326dd6c7398264c6dfe655d2"
+    },
+    {
+      "path": "data-center/dao/user_center.go",
+      "before": "d2eaa7ea761964235af3e96ce43ba8a3c4198967e110d1353c5fe0ba348523b7",
+      "after": "06c68dec2e7c298ca6ff01a1ac7b72be22d469fb4e95a0c73d42995f52bd6ed8"
+    }
+  ]
+}

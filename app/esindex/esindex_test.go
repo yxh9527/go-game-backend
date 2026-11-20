@@ -7,11 +7,11 @@ func TestNormalizeKey(t *testing.T) {
 		in   string
 		want string
 	}{
-		{"/fg/config/pool/bxjg", "/fg/config/pool/bxjg"},
-		{"/config/pool/bxjg", "/fg/config/pool/bxjg"},
-		{"config/pool/bxjg", "/fg/config/pool/bxjg"},
-		{"/agent/1/pool/bxjg", "/fg/agent/1/pool/bxjg"},
-		{"/fg/agent/1/pool/bxjg", "/fg/agent/1/pool/bxjg"},
+		{PathRoot() + "/config/pool/bxjg", PathRoot() + "/config/pool/bxjg"},
+		{"/config/pool/bxjg", PathRoot() + "/config/pool/bxjg"},
+		{"config/pool/bxjg", PathRoot() + "/config/pool/bxjg"},
+		{"/agent/1/pool/bxjg", PathRoot() + "/agent/1/pool/bxjg"},
+		{PathRoot() + "/agent/1/pool/bxjg", PathRoot() + "/agent/1/pool/bxjg"},
 		{"", ""},
 		{"/other/pool/bxjg", ""},
 	}

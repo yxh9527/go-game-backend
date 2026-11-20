@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/finance_marker_retention_test.go",
+      "before": null,
+      "after": "167258c5aa6ed9b3724e9d66922c0c00b0a4db573a31dd5c305c80d0e7c13f19"
+    },
+    {
+      "path": "lottery/dao/finance_marker_retention.go",
+      "before": null,
+      "after": "20fd520182f5a85c2de043a3340d4f2d1450013667f9ef703715851cc4b4d69f"
+    },
+    {
+      "path": "lottery/dao/finance_seat_net.go",
+      "before": "d34be9378a7ff150fcf91ca9c0027ffd791f9a2f4fb0410bd289c818d5f441d6",
+      "after": "dc126baee0d77d28060a125af39481f93bed3ff269939cd5eff65815b0be8ff4"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_compaction_test.go",
+      "before": "533828db0553d93666ae7da9b34dd823f406dfc38c5c9d26ca5e09e17a4219da",
+      "after": "f1d5531aa66bb6c50332f833654da65e9e534ae907d6d2db93e2f18aa66f130e"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_compaction.go",
+      "before": "14f1c714a71a1561213cbace06271aba54d99349a47035858e26906c7256196e",
+      "after": "589ea86f95b41a234dfc14bdf81399372e1461056f4f23a0964c3d7e8afa8df1"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_retention_test.go",
+      "before": null,
+      "after": "ca0b116b13da0305df964dc67720b3dc37c65dd5ecaf2aae7c31b39df90f2166"
+    },
+    {
+      "path": "lottery/dao/scratch_receipt_retention.go",
+      "before": null,
+      "after": "a9e1bec273d7d98fdc897372238b6822f69b92364475e1e1ef1d97bfc12fde91"
+    },
+    {
+      "path": "lottery/dao/scratch_store.go",
+      "before": "872a05cfc92deb5fdf648886806675ed6818572b7bcc9488d9c5bc0f8051e59c",
+      "after": "9dac32c2602cdc47194afe86f5904506f38fad7356d2df49656c1a4536250418"
+    },
+    {
+      "path": "lottery/unified/finance_marker_retention_test.go",
+      "before": null,
+      "after": "12b6b13ac143310c178504058d4fe217bd4139f27b77f99d103a3c5c91123221"
+    },
+    {
+      "path": "lottery/unified/finance_marker_retention.go",
+      "before": null,
+      "after": "b34a7d0291f9b7378464258e9938b705ff956d86ebc24f0a6ad5ebf8be2e3633"
+    },
+    {
+      "path": "lottery/unified/scratch.go",
+      "before": "5d82ff6b11a3b44d5fde27ea5e9611ade1257eedf45afa71697fcf684268815f",
+      "after": "d05d5cb43665809a29ac727b6cb76ddf0d2e9cec9c92ee97d2e743af8d7a0ff4"
+    },
+    {
+      "path": "lottery/unified/service.go",
+      "before": "c688c470b1231a4f0797afca5f14c26b08651f383bf3bafc3eb943afea5c9d4f",
+      "after": "1f57d854719e1a025fa856998247a72b808d56dc1433fb6ddbdd42e3148cc7e8"
+    }
+  ]
+}

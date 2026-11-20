@@ -1,0 +1,31 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "app/tables/gogame/player_panel_game_test.go",
+      "before": null,
+      "after": "4d3821c832fbb3f592c13a5b086fcc3a03b91ce104435b159ae2bfdcc4dcf546"
+    },
+    {
+      "path": "app/tables/gogame/player_panel.go",
+      "before": "cbf6208403eb148016df3cad6364b02e27e90146a6a6ebea830d5ec35c2827d6",
+      "after": "143ec0e60a53f30463f72d574d9069397d8da4c739a431f9d2c01002e0ae958b"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals_test.go",
+      "before": null,
+      "after": "5e80437cdca9f37baa23de02ed90ec57d6bfd0108409b59719834e7975abf143"
+    },
+    {
+      "path": "data-center/dao/player_panel_totals.go",
+      "before": null,
+      "after": "39249e03d82c1fbf7c1557ddd0ba6e615197f329824d31209cae6ac570abae7a"
+    },
+    {
+      "path": "data-center/dao/player_panel.go",
+      "before": "a1b58d8a53cbfb05b76e0b9b8247e34897522c5fc6c0119188ab3959e5c2cca7",
+      "after": "4474e182f0ddd785d68a78a95451eeb6a823f896889eac70aeb729d35d3b6567"
+    }
+  ]
+}

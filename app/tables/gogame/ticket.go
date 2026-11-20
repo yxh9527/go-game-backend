@@ -11,6 +11,7 @@ type Ticket struct {
 	MatchId    int64           `gorm:"column:match_id;index;default:0;" json:"match_id"`
 	Num        int64           `gorm:"column:num;default:0;" json:"num"`
 	Remain     int64           `gorm:"column:remain;default:0;" json:"remain"`
+	Disabled   bool            `gorm:"column:disabled;default:false;" json:"disabled"`
 	CreateTime int64           `gorm:"column:create_time;default:0;" json:"create_time"`
 	UpdateTime int64           `gorm:"column:update_time;default:0;" json:"update_time"`
 }
@@ -34,13 +35,16 @@ func (t *TicketCurrencyRate) TableName() string {
 
 // TicketHold 门票持有记录。奖励发门票写入本表，报名抵扣将 IsUse 标为已用。
 type TicketHold struct {
-	Id         int64  `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
-	TicketId   int64  `gorm:"column:ticket_id;index;default:0;" json:"ticket_id"`
-	Owner      int64  `gorm:"column:owner;index;default:0;" json:"owner"`
-	IsUse      int32  `gorm:"column:is_use;index;default:0;" json:"is_use"`
-	UseTime    int64  `gorm:"column:use_time;default:0;" json:"use_time"`
-	UseMatchId int64  `gorm:"column:use_match_id;index;default:0;" json:"use_match_id"`
-	CreateTime int64  `gorm:"column:create_time;default:0;" json:"create_time"`
+	Id           int64   `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+	TicketId     int64   `gorm:"column:ticket_id;index;default:0;" json:"ticket_id"`
+	Owner        int64   `gorm:"column:owner;index;default:0;" json:"owner"`
+	IsUse        int32   `gorm:"column:is_use;index;default:0;" json:"is_use"`
+	UseTime      int64   `gorm:"column:use_time;default:0;" json:"use_time"`
+	UseMatchId   int64   `gorm:"column:use_match_id;index;default:0;" json:"use_match_id"`
+	CreateTime   int64   `gorm:"column:create_time;default:0;" json:"create_time"`
+	IssueKey     *string `gorm:"column:issue_key;size:128;uniqueIndex:ux_ticket_issue,priority:1;" json:"issue_key,omitempty"`
+	IssueOrdinal *int32  `gorm:"column:issue_ordinal;uniqueIndex:ux_ticket_issue,priority:2;" json:"issue_ordinal,omitempty"`
+	IssueAgent   int64   `gorm:"column:issue_agent;default:0;" json:"issue_agent"`
 }
 
 func (t *TicketHold) TableName() string {

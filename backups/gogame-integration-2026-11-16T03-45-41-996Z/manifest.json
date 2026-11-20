@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "date": "2026-11-12",
+  "files": [
+    {
+      "path": "lottery/dao/finance_bet_bill.go",
+      "before": "025c41f974cdc3b28702c3fbec8efaf730ce9ab0b3dbec0b8c3740885f282059",
+      "after": "0c53eb7f838b76cd699cd2bed27d99f21552d70079178ba5172808b1fd8387af"
+    },
+    {
+      "path": "lottery/dao/finance_cancel_bill.go",
+      "before": "5f618f627d2daf7e9f9edef5fded36531c3e39477e5a1ed50799ced14b33e379",
+      "after": "840dfd42568bac81f084ab43f7527a617a0dd86732958bd8c8e9cb2987148025"
+    },
+    {
+      "path": "lottery/unified/bet_bills.go",
+      "before": "619f5b2b56bcc86529fdc4aab0e935eb31510c3dc2e9d4159566c0997690917b",
+      "after": "f17111e7aaa832f007ac4ff0eab0b60cd849b611fe0a1ba35f3412ecae4d638f"
+    },
+    {
+      "path": "lottery/unified/invalid_bill_once_test.go",
+      "before": null,
+      "after": "fce18c959eb731ee538b3e96c01f3d405c57c6308547d35375f8e23534a80317"
+    }
+  ]
+}

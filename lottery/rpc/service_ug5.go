@@ -173,6 +173,12 @@ func (d *LotteryService) Ug5Guess(ctx context.Context, req *services.Ug5GuessReq
 		return failUg5Guess(resp, code, "")
 	}
 	defer d.endMultiOpLock(lockKey)
+	if bet.IsPositive() && !d.recordStorageAllowsWager() {
+		if idemKey != "" {
+			d.abortIdempotency(idemKey)
+		}
+		return failUg5Guess(resp, services.ErrorCode_SYSTEM_ERROR, "recordStorageUnavailable")
+	}
 
 	eGame := dao.GamesManagerIns().GetById(int64(req.GameId))
 	eAgent := dao.AgentManagerIns().Get(int64(req.AgentId))
