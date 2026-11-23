@@ -58,7 +58,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	seeds := tables.DefaultGameSeeds()
+	seeds := tables.GameServerSeeds()
 	pipe := rdb.Pipeline()
 	n := 0
 	for _, seed := range seeds {

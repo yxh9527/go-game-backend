@@ -61,14 +61,16 @@ func InitMysqlDb(m, p *gorm.DB) {
 		m.AutoMigrate(&manager.GameType{})
 	}
 	{
-		var gameTypeCount int64
-		m.Model(&manager.GameType{}).Count(&gameTypeCount)
-		if gameTypeCount == 0 {
-			m.Create([]*manager.GameType{
-				{Name: "slots"},
-				{Name: "fruits"},
-				{Name: "ug5"},
-			})
+		var gameTypes []manager.GameType
+		m.Find(&gameTypes)
+		typeNames := make(map[string]bool, len(gameTypes))
+		for _, gt := range gameTypes {
+			typeNames[gt.Name] = true
+		}
+		for _, name := range []string{"slots", "normal", "hundred"} {
+			if !typeNames[name] {
+				m.Create(&manager.GameType{Name: name})
+			}
 		}
 	}
 	if !m.Migrator().HasTable(&manager.Game{}) {
@@ -77,44 +79,36 @@ func InitMysqlDb(m, p *gorm.DB) {
 	if err := gogame.MigrateGameRoutes(m); err != nil {
 		panic(err)
 	}
+	// Seed missing game-server routes without overwriting operator-managed rows.
 	{
-		var gameCount int64
-		m.Model(&manager.Game{}).Count(&gameCount)
-		if gameCount == 0 {
-			now := int(time.Now().Unix())
-			typeByName := map[string]int{}
-			var gameTypes []manager.GameType
-			m.Find(&gameTypes)
-			for _, gt := range gameTypes {
-				typeByName[gt.Name] = int(gt.Id)
+		var gameTypes []manager.GameType
+		m.Find(&gameTypes)
+		typeByName := make(map[string]int, len(gameTypes))
+		for _, gt := range gameTypes {
+			typeByName[gt.Name] = int(gt.Id)
+		}
+		var existing []int
+		m.Model(&manager.Game{}).Pluck("number", &existing)
+		existingNumbers := make(map[int]bool, len(existing))
+		for _, number := range existing {
+			existingNumbers[number] = true
+		}
+		now := int(time.Now().Unix())
+		games := make([]*manager.Game, 0)
+		for _, seed := range GameServerSeeds() {
+			if existingNumbers[seed.Number] || typeByName[seed.TypeName] == 0 {
+				continue
 			}
-			seeds := DefaultGameSeeds()
-			games := make([]*manager.Game, 0, len(seeds))
-			for _, seed := range seeds {
-				gameTypeId := typeByName[seed.TypeName]
-				if gameTypeId == 0 {
-					continue
-				}
-				games = append(games, &manager.Game{
-					Number:     seed.Number,
-					Name:       seed.Symbol,
-					NameZH:     seed.NameZH,
-					ConfName:   seed.Symbol,
-					GameClass:  1,
-					GameType:   gameTypeId,
-					LimitTime:  "10",
-					IsFrozen:   0,
-					State:      1,
-					CreateTime: now,
-					UpdateTime: now,
-					Weight:     0,
-					ShowType:   1,
-					IsShow:     1,
-				})
-			}
-			if len(games) > 0 {
-				m.Create(games)
-			}
+			clientGameType, roomType := seed.ClientGameType, seed.RoomType
+			games = append(games, &manager.Game{
+				Number: seed.Number, Name: seed.Symbol, NameZH: seed.NameZH, ConfName: seed.Symbol,
+				GameClass: 1, GameType: typeByName[seed.TypeName], ClientGameType: &clientGameType, RoomType: &roomType,
+				LimitTime: "10", IsFrozen: 0, State: 1, CreateTime: now, UpdateTime: now,
+				Weight: 0, ShowType: 1, IsShow: 1,
+			})
+		}
+		if len(games) > 0 {
+			m.Create(games)
 		}
 	}
 	if !m.Migrator().HasTable(&manager.PoolConfig{}) {

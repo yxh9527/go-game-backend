@@ -1,24 +1,24 @@
 ﻿redis:
   host:
-    - "172.21.211.214:6379"
+    - "172.21.211.219:9531"
   user: ""
   pwd: ""
 mysql:
   player:
-    host: "172.21.211.214"
+    host: "172.21.211.219"
     user: "root"
-    port: 3306
+    port: 3366
     password: "yxh2362023!@#"
     database: "go_player"
   manager:
-    host: "172.21.211.214"
+    host: "172.21.211.219"
     user: "root"
-    port: 3306
+    port: 3366
     password: "yxh2362023!@#"
     database: "go_manager"
 elastic:
   hosts:
-    - "http://172.21.211.214:9200"
+    - "http://172.21.211.219:9300"
   username: "elastic"
   password: "000000"
 #鏃ュ織淇濆瓨璺緞
