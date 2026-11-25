@@ -7,9 +7,9 @@
         <a :href="managementUrl" target="_blank" rel="noopener noreferrer">独立窗口打开</a>
       </div>
     </div>
-    <p v-if="failed" class="match-error" role="alert">比赛管理页未能加载，请检查比赛服务连接后重新加载。</p>
+    <p v-if="failed" class="match-error" role="alert">没有从比赛服务加载到比赛管理页。请检查部署网关是否将 /gogame-match/ 转发到 match 服务（默认端口 11040），再重新加载。</p>
     <p v-else-if="loading" role="status">正在加载比赛管理…</p>
-    <iframe :key="frameKey" :src="managementUrl" title="比赛管理" referrerpolicy="no-referrer" @load="loaded" @error="failedToLoad" />
+    <iframe v-if="!failed" :key="frameKey" :src="managementUrl" title="比赛管理" referrerpolicy="no-referrer" @load="loaded" @error="failedToLoad" />
   </section>
 </template>
 
